@@ -1,0 +1,101 @@
+extends layout
+
+block content
+	if (!user)
+		button.btn.btn-primary(type="button", onclick='login()') Login
+		button.btn.btn-primary(type="button", onclick='register()') Register
+	if (user)
+		//button.btn.btn-primary(type="button", onclick='goHome()') Home
+		img(id="home" onclick='goHome()' src="/file/Default.jpg")
+		button.btn.btn-primary(type="button", onclick='logout()') Logout
+		p(id="user") #{user.displayname}
+		// Wrapper
+		#wrapper
+			#userList
+				h1 Welcome #{user.username}!
+				h2 User List
+				table
+					thead
+						th Display Name
+						th Email
+					tbody
+			// /USER LIST
+			// USER INFO
+			#userInfo
+				h2 Profile
+				//put all buttons in
+				button.btn.btn-default(type="button", id="revokeadmin", onclick='changeAdmin(false)') Revoke admin
+				button.btn.btn-default(type="button", id="makeadmin", onclick='changeAdmin(true)') Make admin
+				button.btn.btn-default(type="button", id="deleteuser", onclick='deleteUser()') Delete user
+				button.btn.btn-default(type="button", id="edit", onclick='editUser()') Edit
+				img(id="profilepicture" src="" onclick='editUser()')
+				p
+					strong Display Name:
+					|  <span id='userDisplayName' onclick='editUser()'></span>
+					br
+					strong Email:
+					|  <span id='userEmail'></span>
+					br
+					strong Description:
+					|  <span id='userDescription'></span>
+					br
+				p(id="adminOnly")
+					strong Page Views:
+					|  <span></span>
+					br
+					strong IP Address:
+					|  <span id='ipAddress'></span>
+					br
+					strong Location:
+					|  <span id='location'></span>
+					br
+					strong Viewing Device:
+					|  <span id='viewingDevice'></span>
+			// /USER INFO
+			#editPage
+				#pictureSection
+					h1 Change Picture
+					br
+					img(id="profilepicturesection" src="")
+					br
+					form(action="/changePicture", method="post", enctype="multipart/form-data")
+						input(type="file", name="avatar")
+						input(type="text", id="photoemail", name="photoemail", placeholder='Email', readonly)
+						input(type="submit" name="upload" value="Change Photo")
+				#editSection
+					h1 Update Info
+					form(role='form', action="/edit",method="post", style='max-width: 300px;')
+						.form-group
+							span.label Email
+							input.form-control(type='text', id="email", name="email", placeholder='Email', readonly)
+						.form-group
+							span.label Display Name
+							input.form-control(type='text', id="displayname", name="displayname", placeholder='Displayname')
+						.form-group
+							span.label Description
+							input.form-control(type='text', id="description", name="description", placeholder='Description')
+						button.btn.btn-default(type='submit') Update
+						&nbsp;
+						a(href='/')
+						button.btn.btn-primary(type="button") Cancel
+				#passwordSection
+					h1 Change Password
+					form(role='form', action="/changepassword",method="post", style='max-width: 300px;')		
+						.form-group
+							input.form-control(type='password', id="changeusername", name="username", placeholder='Username')
+						.form-group
+							span.label Old Password
+							input.form-control(type='password', name="password", placeholder='Old Password')
+						.form-group
+							span.label New Password
+							input.form-control(type='password', name="newpassword", placeholder='New Password')
+						.form-group
+							span.label Confirm Password
+							input.form-control(type='password', name="confirmpassword", placeholder='Confirm Password')
+						button.btn.btn-default(type='submit') Change Password
+						&nbsp;
+						a(href='/')
+						button.btn.btn-primary(type="button") Cancel
+					br
+					h4= info
+		// /WRAPPER

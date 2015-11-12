@@ -1,0 +1,26 @@
+extends layout
+
+block content
+	a(href="/") Home
+	br
+	// Wrapper
+	#wrapper
+
+		// USER INFO
+		#userInfo
+			h2 Profile
+			//control logic for buttons
+			p
+				strong Display Name:
+				|  <span id='userDisplayName'></span>
+				br
+				strong Email:
+				|  <span id='userEmail'></span>
+				br
+				strong Description:
+				|  <span id='userDescription'></span>
+				br
+				strong Profile Picture:
+				|  <span id='userProfilePicture'></span>
+		// /USER INFO
+	// /Wrapper
