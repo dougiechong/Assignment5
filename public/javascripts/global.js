@@ -102,6 +102,25 @@ function showUserInfo(event) {
 			$('#deleteuser').hide();
 			$('#edit').hide();
 			$('#adminOnly').hide();
+			
+			$('#commentemail').val(thisUserObject.email);
+			$('#authoremail').val(user.username);
+			
+			var tableContent = '';
+		
+			console.log("ratings[0].author: " + thisUserObject.ratings[0]);
+			// console.log("ratings[1].author: " + viewuser.ratings[0].author);
+			
+			$.each(thisUserObject.ratings, function(){
+			tableContent += '<div class="eachcomment">';
+            tableContent += '<div class="panel panel-default">';
+			tableContent += '<div class="panel-heading">' + this.author+ '</div>';
+			tableContent += '<div class="panel-body">' + '<p><b>Rating:</b> ' + this.rate + '</p> </br>'+ '<p><b>Comment: </b>' + this.comment + '</p></div>';
+            tableContent += '</div>';
+			tableContent += '</div>';
+			console.log(this.comment);
+        });
+        $('#Commentslist').html(tableContent);
 			//choose what to be shown based on user type
 			if(user.superadmin) {
 				$('#adminOnly').show();
