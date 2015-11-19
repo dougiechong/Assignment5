@@ -172,7 +172,7 @@ router.post('/register', function(req, res) {
 									   ipaddr: req.ip, location: geo, device: req.device.type, pageviews: 0,
 									   profilepicture: "Default.jpg", doglover: local_doglover,
 									   dogowner: local_dogowner,
-									   admin: isAdmin}), req.body.password, function(err, account) {
+									   admin: isAdmin, lat: req.body.lat, lng: req.body.lng}), req.body.password, function(err, account) {
 			if (err) {
 			  return res.render("register", {info: "Sorry. That email already exists. Try again."});
 			}

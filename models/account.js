@@ -24,7 +24,9 @@ var Account = new Schema({
 =======
 >>>>>>> parent of c50824f... Added Comments and Ratings
 	doglover: Boolean,
-	dogowner: Boolean
+	dogowner: Boolean,
+	lat: Number,
+	lng: Number
 });
 
 Account.plugin(passportLocalMongoose);
