@@ -65,6 +65,7 @@ function populateTable() {
 		$('#user').hide(); //takes up space
 		$('#photoemail').hide(); //takes up space
 		$('#changeusername').hide(); //takes up space
+		$('#Commentswrapper').hide();
 		$('#userInfo').hide();
 		$('#userList').show();
 		$('#editPage').hide();
@@ -94,6 +95,7 @@ function showUserInfo(event) {
 			//Populate Info Box		
 			//show info hide rest
 			$('#userInfo').show();
+			$('#Commentswrapper').show();
 			$('#userList').hide();
 			$('#editPage').hide();
 			//start off all hidden
