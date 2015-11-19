@@ -24,12 +24,17 @@ console.log(geo);
 router.post('/clickeduser/:username', function (req, res) {
 	req.session.userClicked = {username: req.params.username};
 	console.log(req.session.userClicked);
+	console.log("req: "+req.body.username);
 	res.redirect('/');
  });
  
  router.get('/clickeduser', function (req, res) {
-	console.log(req.session.userClicked);
-	res.json(req.session.userClicked)
+	console.log("get "+req.session.userClicked);
+	Account.findOne({"username":req.session.userClicked.username},{},function(e,docs){
+		console.log("docs " + docs);
+        res.json( {"userClicked": req.session.userClicked, "request": req.body, "viewuser": docs})
+    });
+	
  });
 
 router.get('/', function (req, res) {
@@ -145,25 +150,17 @@ router.post('/register', function(req, res) {
 	var isSuperadmin=false;
 	var isAdmin = false;
 	Account.count(function (err, count) {
+		console.log(count);
 		if (!err && count === 0) {
 			isSuperadmin=true;
 			isAdmin = true;
 		}
 		var geo = geoip.lookup(req.ip);
-		if(req.body.dogowner)
-			var local_dogowner = true;
-		else
-			var local_dogowner = false;
-		if(req.body.doglover)
-			var local_doglover = true;
-		else
-			var local_doglover= false;
 		//username should be email, as it is required  for passport
 		Account.register(new Account({ username : req.body.username,  email : req.body.username,
 									   displayname: req.body.username, superadmin: isSuperadmin,
 									   ipaddr: req.ip, location: geo, device: req.device.type, pageviews: 0,
-									   profilepicture: "Default.jpg", doglover: local_doglover,
-									   dogowner: local_dogowner,
+									   profilepicture: "Default.jpg",
 									   admin: isAdmin}), req.body.password, function(err, account) {
 			if (err) {
 			  return res.render("register", {info: "Sorry. That email already exists. Try again."});
@@ -189,6 +186,28 @@ router.post('/edit', function(req, res) {
 			displayname: req.body.displayname,
 			description: req.body.description
 		}, function(err, account) {
+			if (err) {
+			  return res.render("/", {info: "Sorry. error"});
+			}
+			res.redirect('/');
+	});
+});
+
+//Add a comment and rating
+router.post('/comment', function(req, res) {
+	console.log("req.body.commentemail:  "+req.body.commentemail);
+	console.log("req.body.authoremail:  "+req.body.authoremail);
+	Account.findOneAndUpdate({ //Account.1push?
+		email: req.body.commentemail
+		},
+		{
+			$push: {
+				ratings: {
+					author: req.body.authoremail,
+					rate: req.body.ratingnumber,
+					comment: req.body.comment
+				}}}
+		, function(err, account) {
 			if (err) {
 			  return res.render("/", {info: "Sorry. error"});
 			}

@@ -39,6 +39,15 @@ block content
 					strong Description:
 					|  <span id='userDescription'></span>
 					br
+					strong Ratings and shit:
+					|  <span id='userratingauthor'></span>
+					br
+					strong Rating:
+					|  <span id='userratingrating'></span>
+					br
+					strong Comment:
+					|  <span id='userratingcomment'></span>
+					br
 				p(id="adminOnly")
 					strong Page Views:
 					|  <span></span>
@@ -98,4 +107,33 @@ block content
 						button.btn.btn-primary(type="button") Cancel
 					br
 					h4= info
+			#Commentswrapper.col-md-4
+				h3 comments for #{user.username}
+				h4 Comments
+				#commentsandrating
+					.panel.panel-primary
+						.panel-heading
+							h3.panel-title Leave a Rating
+						.panel-body
+							form(role='form', action="/comment",method="post")
+								.form-group(style='display:none;')
+									span.label Target profile Email THIS SHOULD BE NOT CHANGABLE
+									input.form-control(type='text', id="commentemail", name="commentemail", placeholder='Email')
+								.form-group(style='display:none;')
+									span.label Current user Email
+									input.form-control(type='text', id="authoremail", name="authoremail", placeholder='Email')
+								.form-group
+									span.label Rating
+									select(name='ratingnumber')
+										option(value=5) 5
+										option(value=4) 4
+										option(value=3) 3
+										option(value=2) 2
+										option(value=1) 1
+								.form-group
+									span.label Comment
+									textarea.form-control(rows="4", id="comment", name="comment",placeholder="Leave a Comment Here")
+								button.btn.btn-primary(type='submit') Submit
+				#Commentslist
+
 		// /WRAPPER
