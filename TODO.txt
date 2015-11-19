@@ -1,0 +1,2 @@
+-Make it only one admin - felt was unnecessary
+-Add dog love/owner - done

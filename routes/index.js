@@ -145,17 +145,25 @@ router.post('/register', function(req, res) {
 	var isSuperadmin=false;
 	var isAdmin = false;
 	Account.count(function (err, count) {
-		console.log(count);
 		if (!err && count === 0) {
 			isSuperadmin=true;
 			isAdmin = true;
 		}
 		var geo = geoip.lookup(req.ip);
+		if(req.body.dogowner)
+			var local_dogowner = true;
+		else
+			var local_dogowner = false;
+		if(req.body.doglover)
+			var local_doglover = true;
+		else
+			var local_doglover= false;
 		//username should be email, as it is required  for passport
 		Account.register(new Account({ username : req.body.username,  email : req.body.username,
 									   displayname: req.body.username, superadmin: isSuperadmin,
 									   ipaddr: req.ip, location: geo, device: req.device.type, pageviews: 0,
-									   profilepicture: "Default.jpg",
+									   profilepicture: "Default.jpg", doglover: local_doglover,
+									   dogowner: local_dogowner,
 									   admin: isAdmin}), req.body.password, function(err, account) {
 			if (err) {
 			  return res.render("register", {info: "Sorry. That email already exists. Try again."});

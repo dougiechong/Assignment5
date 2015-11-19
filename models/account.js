@@ -14,7 +14,9 @@ var Account = new Schema({
 	pageviews: Number,
 	admin: Boolean,
 	superadmin: Boolean,
-	profilepicture: String
+	profilepicture: String,
+	doglover: Boolean,
+	dogowner: Boolean
 });
 
 Account.plugin(passportLocalMongoose);
