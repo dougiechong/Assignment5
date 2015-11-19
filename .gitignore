@@ -15,7 +15,7 @@ $RECYCLE.BIN/
 *.msp
 
 #node modules
-cache/*
+node_modules/**
 
 #uploads
 uploads/*
