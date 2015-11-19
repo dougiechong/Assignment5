@@ -72,7 +72,6 @@ app.use('/', routes);
 
 // passport config
 var Account = require('./models/account');
-//var Rating = require('./models/rating');
 passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());

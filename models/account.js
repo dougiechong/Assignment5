@@ -15,11 +15,14 @@ var Account = new Schema({
 	admin: Boolean,
 	superadmin: Boolean,
 	profilepicture: String,
+<<<<<<< HEAD
 	ratings: [{
 		author: String,
 		rate: Number,
 		comment: String
 	}],
+=======
+>>>>>>> parent of c50824f... Added Comments and Ratings
 	doglover: Boolean,
 	dogowner: Boolean
 });

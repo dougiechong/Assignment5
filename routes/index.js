@@ -28,11 +28,16 @@ router.post('/clickeduser/:username', function (req, res) {
  });
  
  router.get('/clickeduser', function (req, res) {
+<<<<<<< HEAD
 	console.log("get "+req.session.userClicked);
 	Account.findOne({"username":req.session.userClicked.username},{},function(e,docs){
 		console.log("docs " + docs);
         res.json( {"userClicked": req.session.userClicked, "request": req.body, "viewuser": docs})
     });
+=======
+	console.log(req.session.userClicked);
+	res.json(req.session.userClicked)
+>>>>>>> parent of c50824f... Added Comments and Ratings
  });
 
 router.get('/', function (req, res) {
@@ -192,28 +197,6 @@ router.post('/edit', function(req, res) {
 			displayname: req.body.displayname,
 			description: req.body.description
 		}, function(err, account) {
-			if (err) {
-			  return res.render("/", {info: "Sorry. error"});
-			}
-			res.redirect('/');
-	});
-});
-
-//Add a comment and rating
-router.post('/comment', function(req, res) {
-	console.log("req.body.commentemail:  "+req.body.commentemail);
-	console.log("req.body.authoremail:  "+req.body.authoremail);
-	Account.findOneAndUpdate({ //Account.1push?
-		email: req.body.commentemail
-		},
-		{
-			$push: {
-				ratings: {
-					author: req.body.authoremail,
-					rate: req.body.ratingnumber,
-					comment: req.body.comment
-				}}}
-		, function(err, account) {
 			if (err) {
 			  return res.render("/", {info: "Sorry. error"});
 			}
