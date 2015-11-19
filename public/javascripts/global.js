@@ -4,6 +4,7 @@ var userListData = [];
 //make logged in user and clicked user global
 var user;  
 var thisUserObject;
+var mapMarkers = [];
 
 // DOM Ready =============================================================
 $(document).ready(function() {
@@ -17,13 +18,18 @@ $(document).ready(function() {
 	$('#upload').on('click', 'filename', changePicture);
 	
 	// When submit button is clicked on register page
-	$('#submitbutton').on('click', registerformvalidate);
+	$('#register').validate({submitHandler: registerformvalidate});
 	
 	// When submit button is clicked on login page
 	$('#loginsubmit').on('click', loginformvalidate);
 });
 
 // Functions =============================================================
+var clearMarkers = function(){
+	for(var i = 0; i < mapMarkers.length; i++){
+		mapMarkers[i].setMap(null);
+	}
+};
 
 // Fill table with data
 function populateTable() {
@@ -40,6 +46,15 @@ function populateTable() {
             tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '">' + this.displayname + '</a></td>';
             tableContent += '<td>' + this.email + '</td>';
             tableContent += '</tr>';
+
+			var marker = new google.maps.Marker({
+				map: map,
+				position: {
+					lat: this.lat,
+					lng: this.lng
+				}
+			});
+			mapMarkers.push(marker);
         });
 
         // Inject the whole content string into our existing HTML table
@@ -146,7 +161,7 @@ function createUser(event) {
         var newUser = {
             'email': $('#addUser fieldset input#inputUserEmail').val(),
             'password': $('#addUser fieldset input#inputUserPassword').val()
-        }
+        };
 
         // Use AJAX to post the object to our adduser service
         $.ajax({
@@ -219,7 +234,6 @@ function updateUser(event) {
 
                 // If something goes wrong, alert the error message that our service returned
                 alert('Error: ' + response.msg);
-s
             }
         });
     }
@@ -322,22 +336,43 @@ function changePicture() {
 	//$('#profilepicture').src(user.);
 }
 
-function registerformvalidate() {
+function registerformvalidate(form) {
     // Super basic validation - increase errorCount variable if any fields are blank
 	console.log($('#password').val() == '');
-	if($('#password').val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '')
+	if($('#password').val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '') {
 		alert("One or more fields are blank");
+		return;
+	}
 	//check if password equals confirm password
 	if($('#password').val() != $('#confirmpassword').val()){
 		alert("The Passwords do not match");
+		return;
+	}
+	if(!$('#location').val()){
+		alert('Please enter your location.');
+		return;
+	}else{
+		geocoder.geocode({'address':$('#location').val()},function(results,status){
+			if(status == google.maps.GeocoderStatus.OK){
+				var result = results[0].geometry.location;
+				$(form).prepend('<input type="hidden" name="lat" value="'+ result.lat() +'">');
+				$(form).prepend('<input type="hidden" name="lng" value="'+ result.lng() +'">');
+			}else{
+				alert("Invalid Address");
+				return;
+			}
+			form.submit();
+		})
 	}
 }
 
 function loginformvalidate() {
     // Super basic validation - increase errorCount variable if any fields are blank
 	console.log($('#password').val() == '');
-	if($('#email').val() == '' || $('#password').val() == '')
+	if($('#email').val() == '' || $('#password').val() == '') {
 		alert("One or more fields are blank");
-	if(!$('#email').val().includes('@'))
+	}
+	if(!$('#email').val().includes('@')) {
 		alert("not a valid email");
+	}
 }

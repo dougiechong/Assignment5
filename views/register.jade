@@ -5,13 +5,15 @@ block content
     img(id="home" onclick='goHome()' src="/file/Default.jpg")
     h1 Register Page
     br
-    form(role='form', action="/register",method="post", style='max-width: 300px;')
+    form(role='form', action="/register",method="post", style='max-width: 300px;' id="register")
       .form-group
         input.form-control(type='text', id="username", name="username", placeholder='Enter Email')
       .form-group
         input.form-control(type='password', id="password", name="password", placeholder='Password')
       .form-group
         input.form-control(type='password', id="confirmpassword", name="confirmpassword", placeholder='Confirm Password')
+      .form-group
+        input.form-control(type='text' id='location' placeholder='Location' name="location")
       .form-group
         label
           input(type="checkbox", name="doglover", checked=(true===true ? "checked" : "")).checkbox

@@ -16,7 +16,9 @@ var Account = new Schema({
 	superadmin: Boolean,
 	profilepicture: String,
 	doglover: Boolean,
-	dogowner: Boolean
+	dogowner: Boolean,
+	lat: Number,
+	lng: Number
 });
 
 Account.plugin(passportLocalMongoose);
