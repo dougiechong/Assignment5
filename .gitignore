@@ -14,6 +14,15 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
+#node modules
+cache/*
+
+#uploads
+uploads/*
+
+#data
+data/*
+
 # Windows shortcuts
 *.lnk
 
