@@ -1,7 +1,11 @@
+/*****************************************************************************************/
+/* include all required files */ 
 var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
 var router = express.Router();
+
+/*****************************************************************************************/
 
 //used to find location given IP address
 var geoip = require('geoip-lite');
@@ -32,12 +36,9 @@ router.post('/clickeduser/:username', function (req, res) {
 	res.json(req.session.userClicked)
  });
 
+/*****************************************************************************************/
 router.get('/', function (req, res) {
     res.render('index', {user : req.user});
-});
-
-router.get('/register', function(req, res) {
-    res.render('register', { });
 });
 
 var multer = require('multer');
@@ -123,22 +124,27 @@ router.all('/changePicture', upload.single('avatar'), function(req, res) {
 	});
 });
 
-/*
- * GET userlist.
- */
+/*****************************************************************************************/
+/* GET userlist */
+
 router.get('/userlist', function(req, res) {
     Account.find({},{},function(e,docs){
         res.json(docs);
     });
 });
 
-/*
- * Delete user
- */
+/*****************************************************************************************/
+/* Delete user */
+
 router.delete('/userlist', function(req, res) {
     Account.removeUser({},{},function(e,docs){
         res.json(docs);
     });
+});
+
+/*****************************************************************************************/
+router.get('/register', function(req, res) {
+    res.render('register', { });
 });
 
 router.post('/register', function(req, res) {
@@ -180,7 +186,9 @@ router.post('/register', function(req, res) {
 	});
 });
 
-//find the user to be edited by email and update description
+/*****************************************************************************************/
+/* find the user to be edited by email and update description */
+
 router.post('/edit', function(req, res) {
 	Account.findOneAndUpdate({
 		email: req.body.email
@@ -277,14 +285,24 @@ router.delete('/deleteuser/:id', function(req, res) {
     });
 });
 
+/*****************************************************************************************/
+/* login page */ 
+
 router.get('/login', function(req, res) {
-    res.render('login', { user : req.user });
+    res.render('login', { user : req.user, info: req.flash('info')});
 });
 
-router.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/');
+router.get('/flash', function(req, res){
+  req.flash('info', "Account does not exist!")
+  res.redirect('/login');
 });
 
+router.post('/login', 
+	passport.authenticate('local', { successRedirect: '/',
+                                   	failureRedirect: '/flash'})
+);
+
+/*****************************************************************************************/
 router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');

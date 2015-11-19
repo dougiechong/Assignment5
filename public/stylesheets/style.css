@@ -17,6 +17,11 @@ h2 {
 	text-align: center;
 }
 
+/* make the container centered  */
+.container-position { 
+	text-align: right;
+}
+
 .label {
 	color:black;
 }
