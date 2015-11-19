@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<div id="respond">
+
+<!--   <h3>Leave a Comment</h3>
+
+  <form action="post_comment.php" method="post" id="commentform">
+
+    <label for="comment_author" class="required">Your name</label>
+    <input type="text" name="comment_author" id="comment_author" value="" tabindex="1" required="required">
+
+    <label for="email" class="required">Your email;</label>
+    <input type="email" name="email" id="email" value="" tabindex="2" required="required">
+
+    <label for="comment" class="required">Your message</label>
+    <textarea name="comment" id="comment" rows="10" tabindex="4"  required="required"></textarea>
+
+    <-- comment_post_ID value hard-coded as 1 -->
+<!--     <input type="hidden" name="comment_post_ID" value="1" id="comment_post_ID" />
+    <input name="submit" type="submit" value="Submit comment" />
+
+  </form> -->
+  
+  <div class="grid_31">
+				<div class="cform_ct mgtop_30 mgbot_20 posrel"><i class="xpen fa fa-pen"></i>
+					<textarea onkeydown="if(this.value=='Share your thoughts on this story!') { this.value=''; $('.xpen').hide(); }" onclick="if(this.value=='Share your thoughts on this story!') { this.value=''; $('.xpen').hide(); }" onblur="if(this.value=='') { this.value='Share your thoughts on this story!'; $('.xpen').show(); }">Share your thoughts on this story!</textarea>
+					<button type="button" class="cform_button bg-blue col-white upcase"><i class="fa fa-comments"></i> submit</button>
+				</div>
+
+</div>
+</html>

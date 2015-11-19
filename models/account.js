@@ -15,6 +15,11 @@ var Account = new Schema({
 	admin: Boolean,
 	superadmin: Boolean,
 	profilepicture: String,
+	ratings: [{
+		author: String,
+		rate: Number,
+		comment: String
+	}],
 	doglover: Boolean,
 	dogowner: Boolean,
 	lat: Number,
