@@ -7,6 +7,16 @@ h2 {
 	margin:0 0 .5em 0;
 }
 
+/* spacer for below the top bar */ 
+.spacer {
+  margin-top: 40px;
+}
+
+/* make image appear in the middle */ 
+.img-center { 
+	text-align: center;
+}
+
 .label {
 	color:black;
 }
