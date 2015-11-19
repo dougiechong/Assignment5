@@ -161,6 +161,9 @@ router.post('/register', function(req, res) {
 			var local_doglover = true;
 		else
 			var local_doglover= false;
+
+		console.log(req.body.lat);
+		console.log(req.body.lng);
 		//username should be email, as it is required  for passport
 		Account.register(new Account({ username : req.body.username,  email : req.body.username,
 									   displayname: req.body.username, superadmin: isSuperadmin,

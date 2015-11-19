@@ -5,7 +5,8 @@ $(document).ready(function(){
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
-    map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    if(document.getElementById('googleMap'))
+        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
 
     if (navigator.geolocation) {
