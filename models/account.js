@@ -19,19 +19,11 @@ var Account = new Schema({
 		author: String,
 		rate: Number,
 		comment: String
-	}]
+	}],
+	doglover: Boolean,
+	dogowner: Boolean
 });
-
-/*
-var Rating = new Schema({
-    author: Number, //{ type: Schema.ObjectId, ref: 'Account'},
-    // target_profile_id: ObjectId,
-    rate: Number,
-	comment: String
-});
-*/
 
 Account.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('Account', Account);
-// module.exports.Rating = mongoose.model('Rating', Rating);
