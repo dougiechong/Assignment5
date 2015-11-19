@@ -28,11 +28,8 @@ router.post('/clickeduser/:username', function (req, res) {
  });
  
  router.get('/clickeduser', function (req, res) {
-	console.log("get "+req.session.userClicked);
-	Account.findOne({"username":req.session.userClicked.username},{},function(e,docs){
-		console.log("docs " + docs);
-        res.json( {"userClicked": req.session.userClicked, "request": req.body, "viewuser": docs})
-    });
+	console.log(req.session.userClicked);
+	res.json(req.session.userClicked)
  });
 
 router.get('/', function (req, res) {
