@@ -360,16 +360,38 @@ function changePicture() {
 
 function registerformvalidate(form) {
     // Super basic validation - increase errorCount variable if any fields are blank
-	console.log($('#password').val() == '');
-	if($('#password').val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '') {
+	var password = $('#password');
+	console.log(password.val() == '');
+	if(password.val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '') {
 		alert("One or more fields are blank");
 		return;
 	}
 	//check if password equals confirm password
-	if($('#password').val() != $('#confirmpassword').val()){
+	if(password.val() != $('#confirmpassword').val()){
 		alert("The Passwords do not match");
 		return;
 	}
+	var hasNumber = /\d/;
+	var hasCapital = /[A-Z]/;
+	var hasLower = /[a-z]/;
+
+	if(password.val().length < 8){
+		alert("Your password must be at least 8 characters long.");
+		return;
+	}else if(password.val().indexOf($('#username').val())>-1){
+		alert("Your password may not contain your username to better secure your account.");
+		return;
+	}else if(!hasNumber.test(password.val())){
+		alert("Your password must contain at least one number.");
+		return;
+	}else if(!hasCapital.test(password.val())){
+		alert("Your password must contain at least one capital letter.");
+		return;
+	}else if(!hasLower.test(password.val())){
+		alert("Your password must contain at least one lowercase letter.");
+		return;
+	}
+
 	if(!$('#location').val()){
 		alert('Please enter your location.');
 		return;
