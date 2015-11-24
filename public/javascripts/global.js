@@ -10,7 +10,6 @@ var mapMarkers = [];
 $(document).ready(function() {
     // Populate the user table on initial page load
     populateTable();
-    requestDogLover();
 	// Username link click
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 	
@@ -74,6 +73,11 @@ function populateTable() {
 		var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.displayname; }).indexOf(userdisplayname);
 		// Get our User Object
 		user = userListData[arrayPosition];
+		if(user.dogowner){
+			$('#requestDogLover').show();
+		} else {
+			$('#requestDogLover').hide();
+		}
     });
 };
 
