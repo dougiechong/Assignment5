@@ -20,6 +20,11 @@ var Account = new Schema({
 		rate: Number,
 		comment: String
 	}],
+	requests: [{
+		starttime: String,
+		endtime: String,
+		acceptedby: String,
+	}],
 	doglover: Boolean,
 	dogowner: Boolean,
 	lat: Number,

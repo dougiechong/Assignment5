@@ -229,6 +229,41 @@ router.post('/comment', function(req, res) {
 	});
 });
 
+//Add a request
+router.post('/requestdoglover', function(req, res) {
+	Account.findOneAndUpdate({ 
+		email: req.session.passport.user
+		},
+		{
+			$push: {
+				requests: {
+					starttime: req.body.starttime.toString(),
+					endtime: req.body.endtime.toString(),
+					acceptedby: ""
+				}
+			}
+		}
+		, function(err, account) {
+			if (err) {
+			  return res.render("/", {info: "Sorry. error"});
+			}
+			res.redirect('/');
+	});   
+});
+
+//Accept a request
+router.post('/acceptrequest/:id/:reqid', function(req, res) {
+	Account.findOneAndUpdate(
+	   { email: req.params.id, "requests._id": req.params.reqid},
+	   { $set: { "requests.$.acceptedby" :  req.session.passport.user} },
+	function(err, account) {
+			if (err) {
+			  return res.render("/", {info: "Sorry. error"});
+			}
+			res.redirect('/');
+	});
+});
+
 //find the user to have password changed
 router.post('/changepassword',passport.authenticate('local'), function (req, res){
 	console.log("hi");

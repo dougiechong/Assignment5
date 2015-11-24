@@ -6,11 +6,21 @@ var user;
 var thisUserObject;
 var mapMarkers = [];
 
+function insertButton() {
+}
+
+function requestDogLover() {
+	/*if(user.dogowner)
+		$('#requestdoglover').show();
+	else
+		$('#requestdoglover').show();*/
+}
+
 // DOM Ready =============================================================
 $(document).ready(function() {
     // Populate the user table on initial page load
     populateTable();
-	
+    requestDogLover();
 	// Username link click
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 	
@@ -108,6 +118,25 @@ function showUserInfo(event) {
 			$('#commentemail').val(thisUserObject.email);
 			$('#authoremail').val(user.username);
 			
+			var availableRequests = '<div>Available Requests</div>';
+			var acceptedRequests = '<div>Accepted Requests</div>';
+			$.each(thisUserObject.requests, function(){
+			if(this.acceptedby == ""){
+				availableRequests += '<div class="eachrequest">';
+				availableRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
+				availableRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
+				availableRequests += '<input type="button" onclick="acceptRequest(\'' + this._id + '\')" value="accept" />'
+				availableRequests += '</div>';
+			} else {
+				acceptedRequests += '<div class="eachrequest">';
+				acceptedRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
+				acceptedRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
+				acceptedRequests += '<div>Accepted By: ' + this.acceptedby + '</div>';
+				acceptedRequests  += '</div>';			
+			}
+			});
+			$('#Requestslist').html(availableRequests+acceptedRequests);
+			
 			var tableContent = '';
 		
 			console.log("ratings[0].author: " + thisUserObject.ratings[0]);
@@ -121,7 +150,7 @@ function showUserInfo(event) {
             tableContent += '</div>';
 			tableContent += '</div>';
 			console.log(this.comment);
-        });
+			});
         $('#Commentslist').html(tableContent);
 			//choose what to be shown based on user type
 			if(user.superadmin) {
@@ -157,113 +186,6 @@ function showUserInfo(event) {
 			});
 		});
     });
-};
-
-// create new user
-function createUser(event) {
-    event.preventDefault();
-
-    // Super basic validation - increase errorCount variable if any fields are blank
-    var errorCount = 0;
-    $('#addUser input').each(function(index, val) {
-        if($(this).val() === '') { errorCount++; }
-    });
-	
-	//check if password equals confirm password
-	if($('#addUser fieldset input#inputUserPassword').val() != $('#addUser fieldset input#inputUserConfirmPassword').val()){
-		alert("The Passwords do not match");
-		// Clear the form inputs
-		$('#addUser fieldset input').val('');
-	}
-
-    // Check and make sure errorCount's still at zero
-    else if(errorCount === 0) {
-
-        // If it is, compile all user info into one object
-        var newUser = {
-            'email': $('#addUser fieldset input#inputUserEmail').val(),
-            'password': $('#addUser fieldset input#inputUserPassword').val()
-        };
-
-        // Use AJAX to post the object to our adduser service
-        $.ajax({
-            type: 'POST',
-            data: newUser,
-            url: '/users/adduser',
-            dataType: 'JSON'
-        }).done(function( response ) {
-
-            // Check for successful (blank) response
-            if (response.msg === '') {
-				window.location.href = '/users'
-            }
-            else {
-
-                // If something goes wrong, alert the error message that our service returned
-                alert('Error: ' + response.msg);
-
-            }
-        });
-    }
-    else {
-        // If errorCount is more than 0, error out
-        alert('Please fill in all fields');
-        return false;
-    }
-};
-
-// update a User
-function updateUser(event) {
-    event.preventDefault();
-
-    // Super basic validation - increase errorCount variable if any fields are blank
-    var errorCount = 0;
-    $('#addUser input').each(function(index, val) {
-        if($(this).val() === '') { errorCount++; }
-    });
-
-    // Check and make sure errorCount's still at zero
-    if(errorCount === 0) {
-
-        // If it is, compile all user info into one object
-        var newUser = {
-            'displayname': $('#addUser fieldset input#inputUserDisplayName').val(),
-            'email': $('#addUser fieldset input#inputUserEmail').val(),
-            'password': $('#addUser fieldset input#inputUserPassword').val(),
-            'description': $('#addUser fieldset input#inputUserDescription').val(),
-            'profilepicture': $('#addUser fieldset input#inputUserProfilePicture').val()
-        }
-
-        // Use AJAX to post the object to our adduser service
-        $.ajax({
-            type: 'POST',
-            data: newUser,
-            url: '/users/adduser',
-            dataType: 'JSON'
-        }).done(function( response ) {
-
-            // Check for successful (blank) response
-            if (response.msg === '') {
-
-                // Clear the form inputs
-                $('#addUser fieldset input').val('');
-
-                // Update the table
-                populateTable();
-
-            }
-            else {
-
-                // If something goes wrong, alert the error message that our service returned
-                alert('Error: ' + response.msg);
-            }
-        });
-    }
-    else {
-        // If errorCount is more than 0, error out
-        alert('Please fill in all fields');
-        return false;
-    }
 };
 
 // Delete User
@@ -338,10 +260,20 @@ function editUser() {
 
 //make admin
 function changeAdmin(state) {
-	console.log(state);
 	$.ajax({
 		type: 'POST',
 		url: '/makeadmin/' + thisUserObject._id + '/' + state
+	}).done(function( response ) {
+		window.location.href = '/';
+    });
+};
+
+//accept request
+function acceptRequest(reqIndex) {
+	console.log(reqIndex);
+	$.ajax({
+		type: 'POST',
+		url: '/acceptrequest/' + thisUserObject.email + '/' + reqIndex
 	}).done(function( response ) {
 		window.location.href = '/';
     });

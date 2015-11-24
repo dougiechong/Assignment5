@@ -23,6 +23,9 @@ uploads/*
 #data
 data/*
 
+#journals
+journal/*
+
 # Windows shortcuts
 *.lnk
 

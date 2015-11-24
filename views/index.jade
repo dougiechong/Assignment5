@@ -54,6 +54,20 @@ block content
               th Display Name
               th Email
             tbody
+          //request for dog lover 
+          #requestDogLover
+            h1 Request for dog lover
+            form(role='form', action="/requestdoglover",method="post", style='max-width: 300px;')
+              .form-group
+                span.label Start Date
+                input.form-control(type='datetime-local', id="starttime", name="starttime")
+              .form-group
+                span.label End Date
+                input.form-control(type='datetime-local', id="endtime", name="endtime")
+              button.btn.btn-default(type='submit') Request
+              &nbsp;
+              a(href='/')
+              button.btn.btn-primary(type="button") Cancel
         // /USER LIST
         // USER INFO
         #userInfo
@@ -86,6 +100,7 @@ block content
             br
             strong Viewing Device:
             |  <span id='viewingDevice'></span>
+          #Requestslist
         // /USER INFO
         #editPage
           #pictureSection
