@@ -92,7 +92,6 @@ function showUserInfo(event) {
 		url: '/clickeduser/' + $(this).attr('rel')
 	}).done(function( response ) {
 		$.getJSON( '/clickeduser', function( data ) {
-			console.log(data);
 			// Retrieve display name from link rel attribute
 			var thisUserName = data.username;
 			// Get Index of object based on id value
@@ -135,9 +134,6 @@ function showUserInfo(event) {
 			$('#Requestslist').html(availableRequests+acceptedRequests);
 			
 			var tableContent = '';
-		
-			console.log("ratings[0].author: " + thisUserObject.ratings[0]);
-			// console.log("ratings[1].author: " + viewuser.ratings[0].author);
 			
 			$.each(thisUserObject.ratings, function(){
 			tableContent += '<div class="eachcomment">';
@@ -146,7 +142,6 @@ function showUserInfo(event) {
 			tableContent += '<div class="panel-body">' + '<p><b>Rating:</b> ' + this.rate + '</p> </br>'+ '<p><b>Comment: </b>' + this.comment + '</p></div>';
             tableContent += '</div>';
 			tableContent += '</div>';
-			console.log(this.comment);
 			});
         $('#Commentslist').html(tableContent);
 			//choose what to be shown based on user type
@@ -267,7 +262,6 @@ function changeAdmin(state) {
 
 //accept request
 function acceptRequest(reqIndex) {
-	console.log(reqIndex);
 	$.ajax({
 		type: 'POST',
 		url: '/acceptrequest/' + thisUserObject.email + '/' + reqIndex
@@ -281,16 +275,12 @@ function changePicture() {
     $.getJSON( '/userclicked', function( data ) {
 		// Stick our user data array into a userlist variable in the global object
 		userClicked = data;
-		console.log(data);
     });
-	console.log("changing pic");
-	//$('#profilepicture').src(user.);
 }
 
 function registerformvalidate(form) {
     // Super basic validation - increase errorCount variable if any fields are blank
 	var password = $('#password');
-	console.log(password.val() == '');
 	if(password.val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '') {
 		alert("One or more fields are blank");
 		return;
@@ -345,7 +335,6 @@ function registerformvalidate(form) {
 
 function loginformvalidate(form) {
     // Super basic validation - increase errorCount variable if any fields are blank
-	console.log($('#password').val() == '');
 	var hasAt = /@/;
 	if($('#username').val() == '' || $('#password').val() == '') {
 		alert("One or more fields are blank");
