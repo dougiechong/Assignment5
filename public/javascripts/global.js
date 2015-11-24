@@ -74,10 +74,12 @@ function populateTable() {
 		var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.displayname; }).indexOf(userdisplayname);
 		// Get our User Object
 		user = userListData[arrayPosition];
-		if(user.dogowner){
-			$('#requestDogLover').show();
-		} else {
-			$('#requestDogLover').hide();
+		if(user){
+			if(user.dogowner){
+				$('#requestDogLover').show();
+			} else {
+				$('#requestDogLover').hide();
+			}
 		}
     });
 };
