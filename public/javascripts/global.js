@@ -46,15 +46,16 @@ function populateTable() {
             tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '">' + this.displayname + '</a></td>';
             tableContent += '<td>' + this.email + '</td>';
             tableContent += '</tr>';
-
-			var marker = new google.maps.Marker({
-				map: map,
-				position: {
-					lat: this.lat,
-					lng: this.lng
-				}
-			});
-			mapMarkers.push(marker);
+			if(document.getElementById('googleMap')){
+				var marker = new google.maps.Marker({
+					map: map,
+					position: {
+						lat: this.lat,
+						lng: this.lng
+					}
+				});
+				mapMarkers.push(marker);
+			}
         });
 
         // Inject the whole content string into our existing HTML table
