@@ -20,7 +20,7 @@ $(document).ready(function() {
 	$('#register').validate({submitHandler: registerformvalidate});
 	
 	// When submit button is clicked on login page
-	$('#loginsubmit').on('click', loginformvalidate);
+	$('#loginsubmit').validate({submitHandler: loginformvalidate});
 });
 
 // Functions =============================================================
@@ -303,9 +303,13 @@ function registerformvalidate(form) {
 	var hasNumber = /\d/;
 	var hasCapital = /[A-Z]/;
 	var hasLower = /[a-z]/;
+	var hasAt = /[@]/;
 
 	if(password.val().length < 8){
 		alert("Your password must be at least 8 characters long.");
+		return;
+	}else if(!hasAt.test($('#username').val())) {
+		alert("Not a valid email. Must have @");
 		return;
 	}else if(password.val().indexOf($('#username').val())>-1){
 		alert("Your password may not contain your username to better secure your account.");
@@ -339,13 +343,16 @@ function registerformvalidate(form) {
 	}
 }
 
-function loginformvalidate() {
+function loginformvalidate(form) {
     // Super basic validation - increase errorCount variable if any fields are blank
 	console.log($('#password').val() == '');
-	if($('#email').val() == '' || $('#password').val() == '') {
+	var hasAt = /@/;
+	if($('#username').val() == '' || $('#password').val() == '') {
 		alert("One or more fields are blank");
+		return
 	}
-	if(!$('#email').val().includes('@')) {
+	if(!hasAt.test($('#username').val())) {
 		alert("not a valid email");
+		return
 	}
 }
