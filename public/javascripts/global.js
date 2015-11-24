@@ -6,16 +6,6 @@ var user;
 var thisUserObject;
 var mapMarkers = [];
 
-function insertButton() {
-}
-
-function requestDogLover() {
-	/*if(user.dogowner)
-		$('#requestdoglover').show();
-	else
-		$('#requestdoglover').show();*/
-}
-
 // DOM Ready =============================================================
 $(document).ready(function() {
     // Populate the user table on initial page load
