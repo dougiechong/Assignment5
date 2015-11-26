@@ -149,6 +149,26 @@ router.get('/register', function(req, res) {
     res.render('register', { title: 'Register' });
 });
 
+function backendValidatePassword(password,username){
+	var hasNumber = /\d/;
+	var hasCapital = /[A-Z]/;
+	var hasLower = /[a-z]/;
+
+	if(password.length < 8){
+		return false;
+	}else if(password.indexOf(username)>-1){
+		return false;
+	}else if(!hasNumber.test(password)){
+		return false;
+	}else if(!hasCapital.test(password)){
+		return false;
+	}else if(!hasLower.test(password)){
+		return false;
+	}
+
+	return true;
+}
+
 router.post('/register', function(req, res) {
 	var isSuperadmin=false;
 	var isAdmin = false;
@@ -166,6 +186,11 @@ router.post('/register', function(req, res) {
 			var local_doglover = true;
 		else
 			var local_doglover= false;
+
+		if(!backendValidatePassword(req.body.password,req.body.username)){
+			console.log('Here');
+			return res.render('register', {info: "Incorrect password format!"});
+		}
 
 		//username should be email, as it is required  for passport
 		Account.register(new Account({ username : req.body.username,  email : req.body.username,

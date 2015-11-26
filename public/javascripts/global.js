@@ -345,7 +345,7 @@ function registerformvalidate(form) {
 	registErrors.hide();
     // Super basic validation - increase errorCount variable if any fields are blank
 	var password = $('#password');
-	if(password.val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '' || !$('location').val()) {
+	if(password.val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '' || !$('#location').val()) {
 		registErrors.text("One or more fields are blank");
 		registErrors.show();
 		return;
