@@ -53,3 +53,8 @@ journal/*
 Network Trash Folder
 Temporary Items
 .apdisk
+searchindex/MANIFEST-000007
+*.ldb
+searchindex/000009.log
+searchindex/LOG
+searchindex/CURRENT

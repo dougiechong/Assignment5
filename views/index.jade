@@ -6,6 +6,14 @@ block header
     img(style="max-width:30px; margin-top: 10px;" src='/file/Default.jpg')
     // p(id="user") #{user.displayname}
 
+block navsearchform
+  .navbar-right
+    ul.nav.navbar-nav
+      li
+        input.form-control(id="searchterm", name="searchterm", type='text', placeholder='Search')
+      li
+        button.btn.btn-default(type="button", onclick='showSearch()') Search
+
 block content
   div.container
 
@@ -59,6 +67,16 @@ block content
                     th Display Name
                     th Email
                   tbody
+        #searchwrapper
+          h1 Search results
+          #searchhits
+            table
+              thead
+                th Display Name
+                th Email
+              tbody
+          #searchnohits
+            h3
 
         hr.reg-header-hr
 
@@ -68,7 +86,6 @@ block content
             .col-sm-8.col-sm-offset-2
               p
                 | Request a dog taker 
-
               #wrapper2
                 .row 
                   .col-sm-3.col-sm-offset-4
