@@ -350,12 +350,6 @@ function registerformvalidate(form) {
 		registErrors.show();
 		return;
 	}
-	//check if password equals confirm password
-	if(password.val() != $('#confirmpassword').val()){
-		registErrors.text("The Passwords do not match");
-		registErrors.show();
-		return;
-	}
 	var hasNumber = /\d/;
 	var hasCapital = /[A-Z]/;
 	var hasLower = /[a-z]/;

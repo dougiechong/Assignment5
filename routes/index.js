@@ -14,7 +14,7 @@ router.get('/awesome2', function (req, res) {
  if(req.session.lastPage) {
 	console.log(req.session.lastPage);
  }
- var ip = req.ip
+ var ip = req.ip;
  console.log("IP" + ip);
 
 var ip = "207.97.227.239";
@@ -149,7 +149,7 @@ router.get('/register', function(req, res) {
     res.render('register', { title: 'Register' });
 });
 
-function backendValidatePassword(password,username){
+router.backendValidatePassword = function backendValidatePassword(password,username){
 	var hasNumber = /\d/;
 	var hasCapital = /[A-Z]/;
 	var hasLower = /[a-z]/;
@@ -167,7 +167,7 @@ function backendValidatePassword(password,username){
 	}
 
 	return true;
-}
+};
 
 router.post('/register', function(req, res) {
 	var isSuperadmin=false;
