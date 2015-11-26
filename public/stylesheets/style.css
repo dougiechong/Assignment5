@@ -12,6 +12,12 @@ h2 {
   margin-top: 40px;
 }
 
+a.login {
+  color: #00B7FF;
+  float: right;
+  margin-right: 15px;
+}
+
 /* make image appear in the middle */ 
 .img-center { 
 	text-align: center;
@@ -20,6 +26,10 @@ h2 {
 /* make the container centered  */
 .container-position { 
 	text-align: right;
+}
+
+p { 
+	text-align: center;
 }
 
 /* make the errors left alight */ 
@@ -69,19 +79,27 @@ a {
   color: #00B7FF;
 }
 
-#wrapper {
+#wrapper1 {
+	position:relative;
+}
+
+#wrapper2 {
 	position:relative;
 }
 
 .map-container{
 	margin-top: 20px;
-	height: 500px;
-	width: 500px;
+	height: 250px;
+	width: 250px;
+	text-align: center;
+	vertical-align: middle;
 }
 
 .jumbotron{
 	height: 100%;
-	padding: 10px !important;;
+	padding: 10px !important;
+	text-align: center;
+	vertical-align: middle;
 }
 
 #userList {
