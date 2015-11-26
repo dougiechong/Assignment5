@@ -12,6 +12,14 @@ $(document).ready(function() {
     populateTable();
 	// Username link click
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+    
+    // search when 'enter' is hit
+    $('#searchterm').keydown(function(event) {
+        if (event.keyCode == 13) {
+            showSearch();
+            return false;
+         }
+    });
 	
 	// When user clicks upload
 	$('#upload').on('click', 'filename', changePicture);
