@@ -53,6 +53,11 @@ p {
 	float: left;
 }
 
+#registErrors{
+	display: none;
+	text-align: left;
+}
+
 #pictureSection{
 	min-width: 280px;
 	width: 30%;

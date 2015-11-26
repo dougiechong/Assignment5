@@ -82,7 +82,7 @@ function populateTable() {
 			}
 		}
     });
-};
+}
 
 
 // Show User Info
@@ -178,7 +178,7 @@ function showUserInfo(event) {
 			});
 		});
     });
-};
+}
 
 // Delete User
 function deleteUser() {
@@ -206,7 +206,7 @@ function deleteUser() {
         // If they said no to the confirm, do nothing
         return false;
     }
-};
+}
 
 // Go Home
 function goHome(event) {
@@ -216,23 +216,23 @@ function goHome(event) {
 	$('#editPage').hide();
 	populateTable();
 	window.location.href = '/'
-};
+}
 
 // Log In
 function login(event) {
 
 	window.location.href = '/login'
-};
+}
 
 // Log out
 function logout(event) {
 	window.location.href = '/logout'
-};
+}
 
 // Register
 function register(event) {
 	window.location.href = '/register'
-};
+}
 
 // Edit User
 function editUser() {
@@ -248,7 +248,7 @@ function editUser() {
 	$('#description').val(thisUserObject.description);
 	if(thisUserObject.profilepicture)
 		$('#profilepicturesection').attr("src", '/file/' + thisUserObject.profilepicture);
-};
+}
 
 //make admin
 function changeAdmin(state) {
@@ -258,7 +258,7 @@ function changeAdmin(state) {
 	}).done(function( response ) {
 		window.location.href = '/';
     });
-};
+}
 
 //accept request
 function acceptRequest(reqIndex) {
@@ -268,7 +268,7 @@ function acceptRequest(reqIndex) {
 	}).done(function( response ) {
 		window.location.href = '/';
     });
-};
+}
 
 function changePicture() {
     // jQuery AJAX call for JSON
@@ -279,15 +279,19 @@ function changePicture() {
 }
 
 function registerformvalidate(form) {
+	var registErrors = $('#registErrors');
+	registErrors.hide();
     // Super basic validation - increase errorCount variable if any fields are blank
 	var password = $('#password');
-	if(password.val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '') {
-		alert("One or more fields are blank");
+	if(password.val() == '' || $('#confirmpassword').val() == '' || $('#username').val() == '' || !$('location').val()) {
+		registErrors.text("One or more fields are blank");
+		registErrors.show();
 		return;
 	}
 	//check if password equals confirm password
 	if(password.val() != $('#confirmpassword').val()){
-		alert("The Passwords do not match");
+		registErrors.text("The Passwords do not match");
+		registErrors.show();
 		return;
 	}
 	var hasNumber = /\d/;
@@ -296,27 +300,34 @@ function registerformvalidate(form) {
 	var hasAt = /[@]/;
 
 	if(password.val().length < 8){
-		alert("Your password must be at least 8 characters long.");
+		registErrors.text("Your password must be at least 8 characters long.");
+		registErrors.show();
 		return;
 	}else if(!hasAt.test($('#username').val())) {
-		alert("Not a valid email. Must have @");
+		registErrors.text("Not a valid email. Must have @");
+		registErrors.show();
 		return;
 	}else if(password.val().indexOf($('#username').val())>-1){
-		alert("Your password may not contain your username to better secure your account.");
+		registErrors.text("Your password may not contain your username to better secure your account.");
+		registErrors.show();
 		return;
 	}else if(!hasNumber.test(password.val())){
-		alert("Your password must contain at least one number.");
+		registErrors.text("Your password must contain at least one number.");
+		registErrors.show();
 		return;
 	}else if(!hasCapital.test(password.val())){
-		alert("Your password must contain at least one capital letter.");
+		registErrors.text("Your password must contain at least one capital letter.");
+		registErrors.show();
 		return;
 	}else if(!hasLower.test(password.val())){
-		alert("Your password must contain at least one lowercase letter.");
+		registErrors.text("Your password must contain at least one lowercase letter.");
+		registErrors.show();
 		return;
 	}
 
 	if(!$('#location').val()){
-		alert('Please enter your location.');
+		registErrors.text('Please enter your location.');
+		registErrors.show();
 		return;
 	}else{
 		geocoder.geocode({'address':$('#location').val()},function(results,status){
@@ -325,7 +336,8 @@ function registerformvalidate(form) {
 				$(form).prepend('<input type="hidden" name="lat" value="'+ result.lat() +'">');
 				$(form).prepend('<input type="hidden" name="lng" value="'+ result.lng() +'">');
 			}else{
-				alert("Invalid Address");
+				registErrors.text("Invalid Address");
+				registErrors.show();
 				return;
 			}
 			form.submit();
