@@ -4,7 +4,8 @@ var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
 var router = express.Router();
-
+var si = require('search-index')({indexPath: 'searchindex', logLevel: 'info'});
+var async = require('async');
 /*****************************************************************************************/
 
 //used to find location given IP address
@@ -227,6 +228,47 @@ router.post('/comment', function(req, res) {
 			}
 			res.redirect('/');
 	});
+});
+
+router.get('/search', function(req, res) {
+	var userquery = req.query.q;
+    // var si = require('search-index')({indexPath: 'testindex3', logLevel: 'info'});
+    
+    async.series([
+        function EmptyIndex(callback){
+            si.empty(function(err) {
+                console.log('emptied index');
+                callback();
+            })
+            
+        }, 
+        function UpdateIndex(callback){
+            Account.find({},{},function(e,docs){
+                console.log("the current database contents: "+docs);
+                var stringdocs = JSON.stringify(docs);
+                var parsedocs = JSON.parse(stringdocs);
+                var docsinarray = "["+docs+"]";
+                console.log("docsinarray: "+docsinarray);
+                console.log("stringdocs: "+stringdocs);
+                console.log("parsedocs: "+parsedocs);
+                
+                //from here, we will update the index with newest information
+                si.add(parsedocs, {}, function(err) {
+                    console.log('indexing complete;');
+                    callback();
+                  }); 
+            })
+            
+        }],
+        //after the index is updated, we do the search using the query term received
+        function UpdateIndex(){
+            si.search({"query": {"*":[userquery]}}, function(err, results) {
+            console.log('Performing search with query: '+userquery);
+                res.json(results);
+                // callback();
+            });
+        }
+    );
 });
 
 //Add a request

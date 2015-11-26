@@ -18,6 +18,7 @@ block content
         #registErrors.alert.alert-danger
         .spacer 
 
+        form(role='form', action="/register",method="post", style='max-width: 300px;')
           .form-group
             input.form-control(type='text', id="username", name="username", placeholder='Enter Email')
           .form-group
@@ -34,7 +35,7 @@ block content
           .form-group.leftside
             label
               input(type="checkbox" style="margin-right: 10px" name="dogowner" class="pull-left" checked=(true===true ? "checked" : "")).checkbox
-              | Dog Owner
+              | Dog Owner       
           a(href='/')
             button.btn.btn-default(type="button") Cancel
           &nbsp;

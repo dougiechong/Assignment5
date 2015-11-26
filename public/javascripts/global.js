@@ -69,6 +69,8 @@ function populateTable() {
 		$('#userInfo').hide();
 		$('#userList').show();
 		$('#editPage').hide();
+        $('#searchwrapper').hide();
+
 		var userdisplayname = $('#user').text();  //get currently logged in user
 		// Get Index of object based on id value
 		var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.displayname; }).indexOf(userdisplayname);
@@ -84,7 +86,64 @@ function populateTable() {
     });
 }
 
+// Show Search Results
+function showSearch(event) {
+        var tableContent = '';
+        var usersearchterm = document.getElementById("searchterm").value;
+        var searchURL = '/search?q='+usersearchterm;
+        console.log(searchURL);
+        
+        $.getJSON(searchURL, function( data ) {
+        // Stick our user data array into a userlist variable in the global object
+		userListData = data;
+        //as long as 1 hit is returned, display results
+        if (data.hits[0] != null)
+        {
+            $('#searchhits').show();
+            $('#searchnohits').hide();
+            // For each item in our JSON, add a table row and cells to the content string
+            clearMarkers();
+            $.each(data.hits, function(){
+                tableContent += '<tr>';
+                tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.document.username + '">' + this.document.displayname + '</a></td>';
+                tableContent += '<td>' + this.document.email + '</td>';
+                tableContent += '</tr>';
+                if(document.getElementById('googleMap')){
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: {
+                            lat: this.document.lat,
+                            lng: this.document.lng
+                        }
+                    });
+                    mapMarkers.push(marker);
+                }
+            });
 
+            // Inject the whole content string into our existing HTML table
+            $('#searchwrapper table tbody').html(tableContent);
+		}
+        else
+        {
+            // if no hits are returned
+            $('#searchhits').hide();
+            $('#searchnohits').show();
+            $('#searchnohits h3').html("Sorry, We could not find any matches for your search");
+            
+        }
+		//default show userlist
+		$('#user').hide(); //takes up space
+		$('#photoemail').hide(); //takes up space
+		$('#changeusername').hide(); //takes up space
+		$('#Commentswrapper').hide();
+		$('#userInfo').hide();
+		$('#userList').hide();
+		$('#editPage').hide();
+        $('#requestDogLover').hide();
+        $('#searchwrapper').show();
+        
+		});
+};  
 // Show User Info
 function showUserInfo(event) {
 	$.ajax({
@@ -110,6 +169,7 @@ function showUserInfo(event) {
 			$('#deleteuser').hide();
 			$('#edit').hide();
 			$('#adminOnly').hide();
+            $('#searchwrapper').hide();
 			
 			$('#commentemail').val(thisUserObject.email);
 			$('#authoremail').val(user.username);
@@ -211,6 +271,7 @@ function deleteUser() {
 // Go Home
 function goHome(event) {
 	//default show userlist
+    $('#searchwrapper').hide();
 	$('#userInfo').hide();
 	$('#userList').show();
 	$('#editPage').hide();
@@ -236,6 +297,7 @@ function register(event) {
 
 // Edit User
 function editUser() {
+    $('#searchwrapper').hide();
 	$('#userInfo').hide();
 	$('#userList').hide();
 	$('#editPage').show();
