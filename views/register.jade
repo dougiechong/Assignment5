@@ -1,30 +1,53 @@
 extends layout
 
 block content
-  .container
-    img(id="home" onclick='goHome()' src="/file/Default.jpg")
-    h1 Register Page
-    br
-    form(role='form', action="/register",method="post", style='max-width: 300px;' id="register")
-      .form-group
-        input.form-control(type='text', id="username", name="username", placeholder='Enter Email')
-      .form-group
-        input.form-control(type='password', id="password", name="password", placeholder='Password')
-      .form-group
-        input.form-control(type='password', id="confirmpassword", name="confirmpassword", placeholder='Confirm Password')
-      .form-group
-        input.form-control(type='text' id='location' placeholder='Location' name="location")
-      .form-group
-        label
-          input(type="checkbox", name="doglover", checked=(true===true ? "checked" : "")).checkbox
-          | Dog Lover
-      .form-group
-        label
-          input(type="checkbox", name="dogowner", checked=(true===true ? "checked" : "")).checkbox
-          | Dog Owner
-      button.btn.btn-default(type='submit' id='submitbutton') Submit
-      &nbsp;
-      a(href='/')
-        button.btn.btn-primary(type="button") Cancel
-    br
-    h4= info
+  h4
+    small
+      span.glyphicon.glyphicon-list-alt
+    |   Sign up
+  hr.reg-header-hr
+
+  .container.container-position
+    .row
+      .col-sm-3.col-sm-offset-4
+        #errorbox
+          if (info)
+            .alert.alert-danger
+              p.leftside Error! 
+              p.leftside #{info}
+        .spacer 
+
+          .form-group
+            input.form-control(type='text', id="username", name="username", placeholder='Enter Email')
+          .form-group
+            input.form-control(type='password', id="password", name="password", placeholder='Password')
+          .form-group
+            input.form-control(type='password', id="confirmpassword", name="confirmpassword", placeholder='Confirm Password')
+          .form-group
+            input.form-control(type='text' id='location' placeholder='Location' name="location")
+          .form-group.leftside
+            label
+              input(type="checkbox" style="margin-right: 10px" name="doglover" class="pull-left" checked=(true===true ? "checked" : "")).checkbox
+              | Dog Lover
+          .form-group.leftside
+            label
+              input(type="checkbox" style="margin-right: 10px" name="dogowner" class="pull-left" checked=(true===true ? "checked" : "")).checkbox
+              | Dog Owner
+          a(href='/')
+            button.btn.btn-default(type="button") Cancel
+          &nbsp;
+          button.btn.btn-success(type='submit' id='submitbutton') Sign up
+
+  script.
+    $('#confirmpassword').on('input', function() {
+      if ($('#password').val() != $('#confirmpassword').val()) { 
+        var text = "<div class='alert alert-danger'>" + 
+                     "<p class='leftside'> Error! </p>" + 
+                     "<p class='leftside'> Password mismatch! </p>" +  
+                   "</div>"
+        $('#errorbox').html(text);
+      }
+      else { 
+        $('#errorbox').html("<div> </div>");
+      }
+    });

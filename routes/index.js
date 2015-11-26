@@ -143,8 +143,9 @@ router.delete('/userlist', function(req, res) {
 });
 
 /*****************************************************************************************/
+/* sign up page */ 
 router.get('/register', function(req, res) {
-    res.render('register', { });
+    res.render('register', { title: 'Register' });
 });
 
 router.post('/register', function(req, res) {
@@ -165,8 +166,6 @@ router.post('/register', function(req, res) {
 		else
 			var local_doglover= false;
 
-		console.log(req.body.lat);
-		console.log(req.body.lng);
 		//username should be email, as it is required  for passport
 		Account.register(new Account({ username : req.body.username,  email : req.body.username,
 									   displayname: req.body.username, superadmin: isSuperadmin,
@@ -175,16 +174,17 @@ router.post('/register', function(req, res) {
 									   dogowner: local_dogowner,
 									   admin: isAdmin, lat: req.body.lat, lng: req.body.lng}), req.body.password, function(err, account) {
 			if (err) {
-			  return res.render("register", {info: "Sorry. That email already exists. Try again."});
+			  return res.render('register', {info: "Email already exists!"});
 			}
 			
 			if (req.body.password != req.body.confirmpassword) {
-			  return res.render("register", {info: "Sorry. Password does not match Confirm Password. Try again."});
+			  return res.render('register', {info: "Incorrect password!"});
 			}
 			
-			passport.authenticate('local')(req, res, function () {
-				res.redirect('/');
-			});
+      passport.authenticate('local')(req, res, function () {
+        res.redirect('/');
+      });
+
 		});
 	});
 });
