@@ -187,7 +187,7 @@ router.post('/register', function(req, res) {
 		else
 			var local_doglover= false;
 
-		if(!backendValidatePassword(req.body.password,req.body.username)){
+		if(!router.backendValidatePassword(req.body.password,req.body.username)){
 			console.log('Here');
 			return res.render('register', {info: "Incorrect password format!"});
 		}
