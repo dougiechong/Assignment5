@@ -149,7 +149,7 @@ router.get('/register', function(req, res) {
     res.render('register', { title: 'Register' });
 });
 
-router.backendValidatePassword = function backendValidatePassword(password,username){
+router.backendValidatePassword = function(password,username){
 	var hasNumber = /\d/;
 	var hasCapital = /[A-Z]/;
 	var hasLower = /[a-z]/;
@@ -167,6 +167,12 @@ router.backendValidatePassword = function backendValidatePassword(password,usern
 	}
 
 	return true;
+};
+
+router.backendValidateUsername = function(username){
+	var hasAt = /[@]/;
+
+	return hasAt.test(username);
 };
 
 router.post('/register', function(req, res) {
@@ -188,8 +194,11 @@ router.post('/register', function(req, res) {
 			var local_doglover= false;
 
 		if(!router.backendValidatePassword(req.body.password,req.body.username)){
-			console.log('Here');
 			return res.render('register', {info: "Incorrect password format!"});
+		}
+
+		if(!router.backendValidateUsername(req.body.username)){
+			return res.render('register', {info: "Incorrect username format!"});
 		}
 
 		//username should be email, as it is required  for passport
