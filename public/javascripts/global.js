@@ -12,15 +12,11 @@ $(document).ready(function() {
     populateTable();
 	// Username link click
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+    $('#searchhits table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+
+	 // When submit button is clicked on search bar
+	$('#searchform').validate({submitHandler: showSearch});
     
-    // search when 'enter' is hit
-    $('#searchterm').keydown(function(event) {
-        if (event.keyCode == 13) {
-            showSearch();
-            return false;
-         }
-    });
-	
 	// When user clicks upload
 	$('#upload').on('click', 'filename', changePicture);
 	
@@ -97,13 +93,12 @@ function populateTable() {
 // Show Search Results
 function showSearch(event) {
         var tableContent = '';
-        var usersearchterm = document.getElementById("searchterm").value;
-        var searchURL = '/search?q='+usersearchterm;
+        var searchfield = document.getElementById("searchfield").value;
+        var searchterm = document.getElementById("searchterm").value;
+        var searchURL = '/searchresults?searchterm='+searchterm+'&searchfield='+searchfield;
         console.log(searchURL);
         
         $.getJSON(searchURL, function( data ) {
-        // Stick our user data array into a userlist variable in the global object
-		userListData = data;
         //as long as 1 hit is returned, display results
         if (data.hits[0] != null)
         {

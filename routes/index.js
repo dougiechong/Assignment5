@@ -265,9 +265,14 @@ router.post('/comment', function(req, res) {
 });
 
 router.get('/search', function(req, res) {
-	var userquery = req.query.q;
-    // var si = require('search-index')({indexPath: 'testindex3', logLevel: 'info'});
-    
+	var searchterm = req.query.searchterm;
+    var searchfield = req.query.searchfield;
+
+    var q={};
+    q.query = {};
+    q.query[searchfield] = [searchterm];
+            
+    // Run the following three functions in series: Empty the index; query the DB and add all documents to the index; then finally search the index
     async.series([
         function EmptyIndex(callback){
             si.empty(function(err) {
@@ -281,9 +286,6 @@ router.get('/search', function(req, res) {
                 console.log("the current database contents: "+docs);
                 var stringdocs = JSON.stringify(docs);
                 var parsedocs = JSON.parse(stringdocs);
-                var docsinarray = "["+docs+"]";
-                console.log("docsinarray: "+docsinarray);
-                console.log("stringdocs: "+stringdocs);
                 console.log("parsedocs: "+parsedocs);
                 
                 //from here, we will update the index with newest information
@@ -295,15 +297,193 @@ router.get('/search', function(req, res) {
             
         }],
         //after the index is updated, we do the search using the query term received
-        function UpdateIndex(){
-            si.search({"query": {"*":[userquery]}}, function(err, results) {
-            console.log('Performing search with query: '+userquery);
+        function SearchIndex(){
+         /*    si.match(matchOptions, function(err, results) {
+            console.log('Performing search with query: '+searchterm);
                 res.json(results);
-                // callback();
+            }); */
+            si.search(q, function(err, results) {
+            console.log('Performing search with query: '+searchterm);
+                res.json(results);
             });
         }
     );
 });
+
+
+//=================================================================== TEMPORARY======================================================================
+router.get('/match', function(req, res) {
+	var searchterm = req.query.searchterm;
+    var searchfield = req.query.searchfield;
+    var matchOptions = {
+          beginsWith: searchterm, // The beginning of the text to match
+          field: searchfield,     // The field to use (defaults to all fields)
+          threshold: 2,   // The amount of characters to ignore before returning matches (default: 3)
+          limit: 20,      // The maximum amount of suggestions
+          type: 'ID'  // The type of autosuggest returned- can be `simple`, `ID` or `count`
+        }
+    var q={};
+    q.query = {};
+    q.query[searchfield] = [searchterm];
+    // q={"query":{"*":["james"]}};
+            
+    // Run the following three functions in series: Empty the index; query the DB and add all documents to the index; then finally search the index
+    async.series([
+        function EmptyIndex(callback){
+            si.empty(function(err) {
+                console.log('emptied index');
+                callback();
+            })
+            
+        }, 
+        function UpdateIndex(callback){
+            Account.find({},{},function(e,docs){
+                console.log("the current database contents: "+docs);
+                var stringdocs = JSON.stringify(docs);
+                var parsedocs = JSON.parse(stringdocs);
+                console.log("parsedocs: "+parsedocs);
+                
+                //from here, we will update the index with newest information
+                si.add(parsedocs, {}, function(err) {
+                    console.log('indexing complete;');
+                    callback();
+                  }); 
+            })
+            
+        }],
+        //after the index is updated, we do the search using the query term received
+        function SearchIndex(){
+             si.match(matchOptions, function(err, results) {
+            console.log('Performing search with query: '+searchterm);
+                res.json(results);
+            }); 
+
+        }
+    );
+});
+
+
+//final search - combine match and search of Search-Index
+router.get('/searchresults', function(req, res) {
+	var searchterm = req.query.searchterm;
+    //for some reason, the . character messes up the search results. remove everythine after
+    // searchterm = searchterm.substring(0, searchterm.indexOf('.'));
+    searchterm = searchterm.split('.')[0]
+    console.log("serach term is:  " +searchterm);
+    var searchfield = req.query.searchfield;
+            
+    // Run the following three functions in series: Empty the index; query the DB and add all documents to the index; then finally search the index
+    async.series([
+        function EmptyIndex(callback){
+            si.empty(function(err) {
+                console.log('emptied index');
+                callback();
+            })
+            
+        }, 
+        function UpdateIndex(callback){
+            Account.find({},{},function(e,docs){
+                console.log("the current database contents: "+docs);
+                var stringdocs = JSON.stringify(docs);
+                var parsedocs = JSON.parse(stringdocs);
+                console.log("parsedocs: "+parsedocs);
+                
+                //from here, we will update the index with newest information
+                si.add(parsedocs, {}, function(err) {
+                    console.log('indexing complete;');
+                    callback();
+                  }); 
+            })
+            
+        },
+        //after the index is updated, use si.match
+        function MatchIndex(callback){
+            var matchOptions = {
+              beginsWith: searchterm, // The beginning of the text to match
+              field: searchfield,     // The field to use (defaults to all fields)
+              threshold: 2,   // The amount of characters to ignore before returning matches (default: 3)
+              limit: 20,      // The maximum amount of suggestions
+              type: 'ID'  // The type of autosuggest returned- can be `simple`, `ID` or `count`
+            } 
+            
+            si.match(matchOptions, function(err, results) {
+                console.log('Performing search with query: '+searchterm);
+                    console.log("matchIndex results = "+results);
+                    callback(null,results);
+                });
+        
+        }],
+        
+        //then use si.search with the match results
+        function SearchIndex(err,matchresults){  //matchresults = results from function MatchIndex
+            matchresults = matchresults.join(',');
+            matchresults = matchresults.split(',');
+            matchresults.splice(0,3);
+            //at this point, matchresults is an array the elements of the arrays are the document.id of the results found.
+            //need to strip the first 2 characters of each document.id because of technicalities with search-index.search module
+            
+/*             for (i = 0; i < matchresults.length; i++)
+            {
+                matchresults[i] = matchresults[i].substring(2);
+                // matchresults[i] = '"'+matchresults[i]+'"';
+            } */
+            
+            // now we need to put it back into a comma separated strings because that's how searc-index module takes in the query parameters
+            // matchresults = matchresults.join(',');
+            // matchresults = matchresults.substring(1, matchresults.length-1);
+            // matchresults = '[' + matchresults +']';
+            console.log("matchresults = "+matchresults);
+            console.log("matchresults[2] = "+matchresults[2]);
+            
+            
+            var q={};
+            q.query = {};
+            // q.query[searchfield] = matchresults;
+            // q.query = {
+              // '*': [matchresults]
+            // };
+            
+            q.query['*'] = matchresults[2];
+            
+            si.search({"query":{"*":["*"]}}, function(err, results) {
+            console.log('Performing search with query: '+results);
+            var matchfound=0;
+                for(i = 0; i < results.hits.length; i++)
+                {
+                    matchfound = 0;
+                    
+                    for(j = 0; j < matchresults.length; j++)
+                    {
+                        console.log("results.hits[i].document.id = "+results.hits[i].document.id);
+                        console.log("matchresults[j] = "+matchresults[j]);
+                        
+                        if(results.hits[i].document.id == matchresults[j]) 
+                        {
+                            matchfound=1;
+                            break;
+                        }
+                    }
+                    
+                    if(matchfound==0)
+                    {
+                        console.log("MATCH NOT FOUND");
+                        console.log("results.hits[i].document.id = "+results.hits[i].document.id);                       
+                        //delete element in the array
+                        results.hits.splice(i,1);
+                        i--;
+                        // console.log("AFTER results.hits[i].document.id = "+results.hits[i].document.id); 
+                        
+                    }
+                }
+                
+                res.json(results);
+            });
+        }
+    );
+});
+
+//=========================================================================================================================================================================
+
 
 //Add a request
 router.post('/requestdoglover', function(req, res) {
