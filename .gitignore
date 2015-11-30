@@ -17,6 +17,8 @@ $RECYCLE.BIN/
 #node modules
 node_modules/**
 
+searchindex/**
+
 #uploads
 uploads/*
 
