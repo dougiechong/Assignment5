@@ -416,3 +416,7 @@ function loginformvalidate(form) {
 		return
 	}
 }
+
+function facebookLogin() {
+	window.location.href = '/login/facebook';
+}
