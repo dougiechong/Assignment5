@@ -23,6 +23,9 @@ uploads/*
 #data
 data/*
 
+#searchindex
+searchindex/*
+
 #journals
 journal/*
 

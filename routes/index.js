@@ -3,9 +3,20 @@
 var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
+var User = require('../models/user');
 var router = express.Router();
 var si = require('search-index')({indexPath: 'searchindex', logLevel: 'info'});
 var async = require('async');
+
+var isAuthenticated = function (req, res, next) {
+	// if user is authenticated in the session, call the next() to call the next request handler 
+	// Passport adds this method to request object. A middleware is allowed to add properties to
+	// request and response objects
+	if (req.isAuthenticated())
+		return next();
+	// if the user is not authenticated then redirect him to the login page
+	res.redirect('/fail');
+}
 /*****************************************************************************************/
 
 //used to find location given IP address
@@ -39,6 +50,7 @@ router.post('/clickeduser/:username', function (req, res) {
 
 /*****************************************************************************************/
 router.get('/', function (req, res) {
+	console.log("USER" + req.user);
     res.render('index', {user : req.user});
 });
 
@@ -149,7 +161,7 @@ router.get('/register', function(req, res) {
     res.render('register', { title: 'Register' });
 });
 
-router.backendValidatePassword = function backendValidatePassword(password,username){
+router.backendValidatePassword = function(password,username){
 	var hasNumber = /\d/;
 	var hasCapital = /[A-Z]/;
 	var hasLower = /[a-z]/;
@@ -187,7 +199,7 @@ router.post('/register', function(req, res) {
 		else
 			var local_doglover= false;
 
-		if(!backendValidatePassword(req.body.password,req.body.username)){
+		if(!router.backendValidatePassword(req.body.password,req.body.username)){
 			console.log('Here');
 			return res.render('register', {info: "Incorrect password format!"});
 		}
@@ -412,5 +424,72 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
+
+// route for facebook authentication and login
+// different scopes while logging in
+router.get('/login/facebook', 
+  passport.authenticate('facebook', { scope : ['email', 'public_profile'] }
+));
+
+/* GET Home Page */
+router.get('/blah', isAuthenticated, function(req, res){
+	console.log(req);
+	console.log("USER" + req.user)
+	res.json({ user: req.user });
+	//res.redirect("/");
+	//res.render('index', { user: req.user });
+});
+
+// handle the callback after facebook has authenticated the user
+router.get('/login/facebook/callback',
+	passport.authenticate('facebook', {
+		successRedirect : '/',
+		failureRedirect : '/'
+	})
+);
+// handle the callback after facebook has authenticated the user
+/*router.get('/login/facebook/callback',
+  passport.authenticate('facebook', 
+						{ failureRedirect: '/fbFailed' }
+        ),
+
+        function(req, res) 
+        {
+            var user = myGetUserFunc(); // Get user object from DB or etc
+
+            req.logIn(user, function(err) {
+
+              if (err) { 
+                req.flash('error', 'SOMETHING BAD HAPPEND');
+                return res.redirect('/login');
+              }
+
+              req.session.user = user;
+
+              // Redirect if it succeeds
+              req.flash('success', 'Fb Auth successful');
+              return res.redirect('/');
+            });      
+        }
+);*/
+
+// route for twitter authentication and login
+// different scopes while logging in
+router.get('/login/twitter',  
+  passport.authenticate('twitter')
+);
+ 
+// handle the callback after facebook has authenticated the user
+router.get('/login/twitter/callback',
+  passport.authenticate('twitter', {
+    successRedirect : '/',
+    failureRedirect : '/'
+  })
+);
+ 
+/* GET Twitter View Page */
+/*router.get('/twitter', isAuthenticated, function(req, res){
+  res.render('twitter', { user: req.user });
+});*/
 
 module.exports = router;

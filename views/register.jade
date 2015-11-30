@@ -9,7 +9,7 @@ block content
 
   .container.container-position
     .row
-      form(id="register").col-sm-3.col-sm-offset-4
+      .col-sm-3.col-sm-offset-4
         #errorbox
           if (info)
             .alert.alert-danger
@@ -18,7 +18,7 @@ block content
         #registErrors.alert.alert-danger
         .spacer 
 
-        form(role='form', action="/register",method="post", style='max-width: 300px;')
+        form(role='form', action="/register",method="post", style='max-width: 300px;' id="register")
           .form-group
             input.form-control(type='text', id="username", name="username", placeholder='Enter Email')
           .form-group
