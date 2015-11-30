@@ -123,7 +123,7 @@ var initPassport = require('./passport/init');
 initPassport(passport);
 
 var FacebookStrategy = require('passport-facebook').Strategy;
-var User = require('./models/user');
+var User = require('./models/account');
 var fbConfig = require('./fb.js');
 
 module.exports = function(passport) {
