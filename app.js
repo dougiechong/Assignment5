@@ -22,7 +22,7 @@ var geoip = require('geoip-lite');
 var Grid = require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
 var conn = mongoose.connection;
-conn.once('open', function () {
+/*conn.once('open', function () {
     var gfs = Grid(conn.db);
 	gfs.findOne({ filename: 'Default.jpg' },function (err, file) {   
 		//put default profile picture into db if not already in there
@@ -38,7 +38,7 @@ conn.once('open', function () {
 			});
 		}
 	})  
-});
+});*/
 
 //require device to know which type of device is being used
 var device = require('express-device');
