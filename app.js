@@ -22,6 +22,7 @@ var geoip = require('geoip-lite');
 var Grid = require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
 var conn = mongoose.connection;
+var URI = "mongodb://heroku_7x6mqnpd:s6q13aib0fhtvbq8nh0og4gt57@ds061954.mongolab.com:61954/heroku_7x6mqnpd"
 /*conn.once('open', function () {
     var gfs = Grid(conn.db);
 	gfs.findOne({ filename: 'Default.jpg' },function (err, file) {   
@@ -85,7 +86,7 @@ passport.use(new LocalStrategy(Account.authenticate()));
 //passport.deserializeUser(Account.deserializeUser());
 
 // mongoose
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://heroku_7x6mqnpd:s6q13aib0fhtvbq8nh0og4gt57@ds061954.mongolab.com:61954/heroku_7x6mqnpd');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
