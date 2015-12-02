@@ -1,14 +1,17 @@
 var express = require('express');
 var path = require('path');
+
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
+
 var users = require('./routes/users');
 
 var mongoose = require('mongoose');
+
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash'); // for errors 
@@ -23,7 +26,7 @@ var Grid = require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
 var conn = mongoose.connection;
 var URI = "mongodb://heroku_7x6mqnpd:s6q13aib0fhtvbq8nh0og4gt57@ds061954.mongolab.com:61954/heroku_7x6mqnpd"
-/*conn.once('open', function () {
+conn.once('open', function () {
     var gfs = Grid(conn.db);
 	gfs.findOne({ filename: 'Default.jpg' },function (err, file) {   
 		//put default profile picture into db if not already in there
@@ -39,7 +42,7 @@ var URI = "mongodb://heroku_7x6mqnpd:s6q13aib0fhtvbq8nh0og4gt57@ds061954.mongola
 			});
 		}
 	})  
-});*/
+});
 
 //require device to know which type of device is being used
 var device = require('express-device');
