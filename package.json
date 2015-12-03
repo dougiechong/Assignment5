@@ -30,7 +30,7 @@
     "jade": "^1.9.1",
     "mocha": "~1.14.0",
     "mongodb": "https://github.com/mongodb/node-mongodb-native/archive/gridfs-specification.tar.gz",
-    "mongoose": "3.8.23",
+    "mongoose": "latest",
     "morgan": "^1.5.1",
     "multer": "^1.1.0",
     "passport": "^0.2.1",
