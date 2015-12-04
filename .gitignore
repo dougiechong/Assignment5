@@ -17,11 +17,16 @@ $RECYCLE.BIN/
 #node modules
 node_modules/**
 
+searchindex/**
+
 #uploads
 uploads/*
 
 #data
 data/*
+
+#searchindex
+searchindex/*
 
 #journals
 journal/*

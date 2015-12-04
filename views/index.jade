@@ -4,15 +4,20 @@ extends layout
 block header  
   if (user)
     img(style="max-width:30px; margin-top: 10px;" src='/file/Default.jpg')
-    // p(id="user") #{user.displayname}
+    p(id="user") #{user.displayname}
 
 block navsearchform
   .navbar-right
     ul.nav.navbar-nav
-      li
-        input.form-control(id="searchterm", name="searchterm", type='text', placeholder='Search')
-      li
-        button.btn.btn-default(type="button", onclick='showSearch()') Search
+        form.navbar-form.navbar-left(id='searchform', role='search')
+          .form-group
+            select.form-control(name='searchfield', id='searchfield')
+              option(value='*') All Fields
+              option(value='username') Username
+              option(value='location') Location
+          .form-group
+            input.form-control(id="searchterm", name="searchterm", type='text', placeholder='Search')
+          button.btn.btn-default(type='submit') Submit
 
 block content
   div.container
@@ -62,7 +67,7 @@ block content
       
             #wrapper1
               #userList
-                table#users-table.table.table-bordered.table-hover.order-column(cellspacing='0', width='100%')
+                table.table.table-bordered.table-hover.order-column(cellspacing='0', width='100%')
                   thead
                     th Display Name
                     th Email
