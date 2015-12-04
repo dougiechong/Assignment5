@@ -51,14 +51,16 @@ function populateTable() {
             tableContent += '<td>' + this.email + '</td>';
             tableContent += '</tr>';
 			if(document.getElementById('googleMap')){
-				var marker = new google.maps.Marker({
-					map: map,
-					position: {
-						lat: this.lat,
-						lng: this.lng
-					}
-				});
-				mapMarkers.push(marker);
+				if(this.lat&&this.lng) {
+					var marker = new google.maps.Marker({
+						map: map,
+						position: {
+							lat: this.lat,
+							lng: this.lng
+						}
+					});
+					mapMarkers.push(marker)
+				}
 			}
         });
 

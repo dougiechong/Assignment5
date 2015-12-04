@@ -4,26 +4,28 @@ $(document).ready(function(){
     var input = /** @type {HTMLInputElement} */(
         document.getElementById('location'));
     if(input) {
+        console.log(input);
         var autocomplete = new google.maps.places.Autocomplete(input);
     }
     
     // only if the user selects the location dropdown on the search bar
     $('#searchform').on('click', '#searchfield', checkiflocation);
 
-});
+
     searchgeocoder = new google.maps.Geocoder();
 
-var checkiflocation = function(){
-    var checkiflocationvalue = document.getElementById('searchfield').value;
-    console.log("checkiflocation  "+ checkiflocationvalue);
+    var checkiflocation = function(){
+        var checkiflocationvalue = document.getElementById('searchfield').value;
+        console.log("checkiflocation  "+ checkiflocationvalue);
 
-    if (checkiflocationvalue)
-    {
-        var input = /** @type {HTMLInputElement} */(
-            document.getElementById('searchterm'));
-        if(input) {
-            var autocomplete = new google.maps.places.Autocomplete(input);
+        if (checkiflocationvalue)
+        {
+            var input = /** @type {HTMLInputElement} */(
+                document.getElementById('searchterm'));
+            if(input) {
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            }
         }
-    }
 
-};
+    };
+});
