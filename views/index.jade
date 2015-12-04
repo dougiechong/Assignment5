@@ -3,7 +3,7 @@ extends layout
 // the top nav bar 
 block header  
   if (user)
-    img(style="max-width:30px; margin-top: 10px;" src='/file/Default.jpg')
+    img(id="home" onclick='goHome()' src="/file/Default.jpg")
     p(id="user") #{user.displayname}
 
 block navsearchform
@@ -62,16 +62,18 @@ block content
       .container.container-position
         .row.spacer 
           .col-sm-8.col-sm-offset-2
-            p
-              | A list of all of our current users:
-      
             #wrapper1
+              p
+                | A list of all of our current users:
+    
               #userList
                 table.table.table-bordered.table-hover.order-column(cellspacing='0', width='100%')
                   thead
                     th Display Name
                     th Email
                   tbody
+              hr.reg-header-hr
+                
         #searchwrapper
           h1 Search results
           #searchhits
@@ -82,8 +84,6 @@ block content
               tbody
           #searchnohits
             h3
-
-        hr.reg-header-hr
 
         .row      
         .container.container-position

@@ -196,6 +196,7 @@ function showUserInfo(event) {
 			thisUserObject = userListData[arrayPosition];
 			//Populate Info Box		
 			//show info hide rest
+			$('#wrapper1').hide();
 			$('#userInfo').show();
 			$('#Commentswrapper').show();
 			$('#userList').hide();
