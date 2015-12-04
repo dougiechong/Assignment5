@@ -11,12 +11,12 @@ $(document).ready(function(){
     $('#searchform').on('click', '#searchfield', checkiflocation);
 
 });
+    searchgeocoder = new google.maps.Geocoder();
 
 var checkiflocation = function(){
     var checkiflocationvalue = document.getElementById('searchfield').value;
     console.log("checkiflocation  "+ checkiflocationvalue);
 
-    searchgeocoder = new google.maps.Geocoder();
     if (checkiflocationvalue)
     {
         var input = /** @type {HTMLInputElement} */(
