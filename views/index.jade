@@ -4,7 +4,7 @@ extends layout
 block header  
   if (user)
     img(style="max-width:30px; margin-top: 10px;" src='/file/Default.jpg')
-    // p(id="user") #{user.displayname}
+    p(id="user") #{user.displayname}
 
 block navsearchform
   .navbar-right
@@ -67,7 +67,7 @@ block content
       
             #wrapper1
               #userList
-                table#users-table.table.table-bordered.table-hover.order-column(cellspacing='0', width='100%')
+                table.table.table-bordered.table-hover.order-column(cellspacing='0', width='100%')
                   thead
                     th Display Name
                     th Email

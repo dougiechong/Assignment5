@@ -209,7 +209,7 @@ function showUserInfo(event) {
             $('#searchwrapper').hide();
 			
 			$('#commentemail').val(thisUserObject.email);
-			$('#authoremail').val(user.username);
+			//$('#authoremail').val(user.username);
 			
 			var availableRequests = '<div>Available Requests</div>';
 			var acceptedRequests = '<div>Accepted Requests</div>';
