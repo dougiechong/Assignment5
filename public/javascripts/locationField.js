@@ -14,18 +14,15 @@ $(document).ready(function(){
 });
     searchgeocoder = new google.maps.Geocoder();
 
-    var checkiflocation = function(){
+    var checkiflocation = function() {
         var checkiflocationvalue = document.getElementById('searchfield').value;
-        console.log("checkiflocation  "+ checkiflocationvalue);
+        console.log("checkiflocation  " + checkiflocationvalue);
 
-        if (checkiflocationvalue)
-        {
+        if (checkiflocationvalue) {
             var input = /** @type {HTMLInputElement} */(
                 document.getElementById('searchterm'));
-            if(input) {
+            if (input) {
                 var autocomplete = new google.maps.places.Autocomplete(input);
             }
         }
-
     };
-});
