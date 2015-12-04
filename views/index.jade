@@ -43,12 +43,15 @@ block content
       .row.spacer
         .col-sm-8.col-sm-offset-2
           .col-sm-3
-          .col-sm-2.btn-position
-            button.btn.btn-default(type="button", onclick='login()') login
-          .col-sm-2
-          .col-sm-2.btn-position
+          .col-sm-1.btn-position
+            button.btn.btn-default(type="button", onclick='login()') Login
+          .col-sm-1
+          .col-sm-1.btn-position
             button.btn.btn-default(type="button", onclick='register()') Sign up
-          .col-sm-3
+          .col-sm-1
+          .col-sm-1.btn-position
+            button.btn.btn-default(type="button", onclick='facebookLogin()') Use Facebook
+          .col-sm-1
 
     if (user)
       h4
@@ -73,7 +76,7 @@ block content
                     th Email
                   tbody
               hr.reg-header-hr
-                
+
         #searchwrapper
           h1 Search results
           #searchhits
