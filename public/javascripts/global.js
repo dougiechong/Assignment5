@@ -406,10 +406,10 @@ function loginformvalidate(form) {
 	var hasAt = /@/;
 	if($('#username').val() == '' || $('#password').val() == '') {
 		alert("One or more fields are blank");
-		return
+		return;
 	}
 	if(!hasAt.test($('#username').val())) {
 		alert("not a valid email");
-		return
+		return;
 	}
 }

@@ -42,4 +42,14 @@ describe('Index Routes Tests', function(){
         assert.equal(index.backendValidateUsername('tester@testing.com'),true);
         done();
     });
+
+    it('Lat and Lng are invalid (lat:"testlat" and lng:"testlng")' ,function(done){
+        assert.equal(index.backendValidateLatLng('testlat','testlng'),false);
+        done();
+    });
+
+    it('Lat and Lng are valid (lat: "40.33333" and lng: "35.6666")' ,function(done){
+        assert.equal(index.backendValidateLatLng(40.33333,35.6666),true);
+        done();
+    });
 });
