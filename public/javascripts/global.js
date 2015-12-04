@@ -76,6 +76,8 @@ function populateTable() {
 		$('#userList').show();
 		$('#editPage').hide();
         $('#searchwrapper').hide();
+        $('#searchform').show();
+        
 
 		var userdisplayname = $('#user').text();  //get currently logged in user
 		// Get Index of object based on id value
