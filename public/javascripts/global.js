@@ -208,8 +208,8 @@ function showUserInfo(event) {
             $('#searchwrapper').hide();
 			
 			$('#commentemail').val(thisUserObject.email);
-			//$('#authoremail').val(user.username);
-			
+			$('#authoremail').val(user.email);
+
 			var availableRequests = '<div>Available Requests</div>';
 			var acceptedRequests = '<div>Accepted Requests</div>';
 			$.each(thisUserObject.requests, function(){
@@ -260,6 +260,7 @@ function showUserInfo(event) {
 			} else if(user.username == thisUserObject.username)
 				$('#edit').show();
 			$('#userDisplayName').text(thisUserObject.displayname);
+            $('#userDisplayNameComment').text(thisUserObject.displayname);
 			$('#userEmail').text(thisUserObject.email);
 			$('#userDescription').text(thisUserObject.description);
 			$('#pageViews').text(thisUserObject.pageviews);
