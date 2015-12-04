@@ -91,44 +91,11 @@ function populateTable() {
 }
 
 // Show Search Results
-function showSearch(form) {
-    
-    var dfrd1 = $.Deferred();
-        searchgeocoder.geocode({'address':$('#searchterm').val()},function(results,status){
-        console.log("lol: ");
-            if(status == google.maps.GeocoderStatus.OK){
-            console.log("lol2 ");
-                var result = results[0].geometry.location;
-                $(form).prepend('<input type="hidden" id="lat" name="lat" value="'+ result.lat() +'">');
-                $(form).prepend('<input type="hidden" id="lng" name="lng" value="'+ result.lng() +'">');
-            }else{
-            console.log("lol3: ");
-                registErrors.text("Invalid Address");
-                registErrors.show();
-                return;
-            }
-            dfrd1.resolve();
-        });
-            
-$.when(dfrd1).done(function () {   
-        console.log("lol4: ");
+function showSearch(event) {
         var tableContent = '';
         var searchfield = document.getElementById("searchfield").value;
         var searchterm = document.getElementById("searchterm").value;
-        var lat = document.getElementById("lat").value;
-        var lng = document.getElementById("lng").value;
-        
-        console.log("searchfield: "+searchfield);
-        console.log("searchterm: "+searchterm);
-        console.log("lat: "+lat);
-        console.log("lng: "+lng);
-        
-        var searchURL = '';
-        if (searchfield == 'location')
-            searchURL = '/searchlocation?&lng='+lng+'&lat='+lat;
-        else
-            searchURL = '/searchresults?searchterm='+searchterm+'&searchfield='+searchfield;
-            
+        var searchURL = '/searchresults?searchterm='+searchterm+'&searchfield='+searchfield;
         console.log(searchURL);
         
         $.getJSON(searchURL, function( data ) {
@@ -179,7 +146,6 @@ $.when(dfrd1).done(function () {
         $('#searchwrapper').show();
         
 		});
-    });
 };  
 // Show User Info
 function showUserInfo(event) {
