@@ -94,15 +94,12 @@ function populateTable() {
 function showSearch(form) {
     
     var dfrd1 = $.Deferred();
-        searchgeocoder.geocode({'address':$('#searchterm').val()},function(results,status){
-        console.log("lol: ");
+        geocoder.geocode({'address':$('#searchterm').val()},function(results,status){
             if(status == google.maps.GeocoderStatus.OK){
-            console.log("lol2 ");
                 var result = results[0].geometry.location;
                 $(form).prepend('<input type="hidden" id="lat" name="lat" value="'+ result.lat() +'">');
                 $(form).prepend('<input type="hidden" id="lng" name="lng" value="'+ result.lng() +'">');
             }else{
-            console.log("lol3: ");
                 registErrors.text("Invalid Address");
                 registErrors.show();
                 return;
@@ -111,7 +108,6 @@ function showSearch(form) {
         });
             
 $.when(dfrd1).done(function () {   
-        console.log("lol4: ");
         var tableContent = '';
         var searchfield = document.getElementById("searchfield").value;
         var searchterm = document.getElementById("searchterm").value;
