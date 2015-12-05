@@ -9,18 +9,18 @@ block navsearchform
   if (user)
     .navbar-right
       ul.nav.navbar-nav
-          form.navbar-form.navbar-left(id='searchform', role='search', style='display:none;')
-            .form-group
-              select.form-control(name='searchfield', id='searchfield')
-                option(value='*') All Fields
-                option(value='username') Username
-                option(value='location') Location
-            .form-group
-              input.form-control(id="searchterm", name="searchterm", type='text', placeholder='Search')
-            button.btn.btn-default(type='submit') Submit
+        form.navbar-form.navbar-left(id='searchform', role='search', style='display:none;')
+          .form-group
+            select.form-control(name='searchfield', id='searchfield')
+              option(value='*') All Fields
+              option(value='username') Username
+              option(value='location') Location
+          .form-group
+            input.form-control(id="searchterm", name="searchterm", type='text', placeholder='Search')
+          button.btn.btn-default(type='submit') Submit
 
 block content
-  div.container
+  div.container-fluid
 
     // login or sign up  
     if (!user)
@@ -56,17 +56,16 @@ block content
     if (user)
       h4
         small
-          img(style="max-width:15px;" src="/file/"+ user.profilepicture onclick='editUser()')
+          img(style="max-width:15px;" src="/file/"+ user.profilepicture)
         |  
-        a(onclick='editUser()') #{user.username}
+        a.linkshowuser(rel=user.username onclick='showUserInfo()') #{user.username}
         button.btn.btn-default(type="button" class="pull-right" onclick='logout()') Logout
       hr.reg-header-hr
 
-      .row      
-      .container.container-position
-        .row.spacer 
-          .col-sm-8.col-sm-offset-2
-            #wrapper1
+      .row#wrapper1       
+        .container.container-position
+          .row.spacer 
+            .col-sm-8.col-sm-offset-2
               p
                 | A list of all of our current users:
     
@@ -78,142 +77,167 @@ block content
                   tbody
               hr.reg-header-hr
 
-        #searchwrapper
-          h1 Search results
-          #searchhits
-            table
-              thead
-                th Display Name
-                th Email
-              tbody
-          #searchnohits
-            h3
-
-        .row      
+      .row#searchwrapper
+        .container.container-position
+          .row.spacer 
+            .col-sm-8.col-sm-offset-2
+              h4 Results
+              #searchhits
+                table.table.table-bordered.table-hover.order-column(cellspacing='0', width='100%')
+                  thead
+                    th Display Name
+                    th Email
+                  tbody
+              #searchnohits
+      
+      .row#wrapper2     
         .container.container-position
           .row.spacer 
             .col-sm-8.col-sm-offset-2
               p
                 | Request a dog taker 
-              #wrapper2
                 .row 
                   .col-sm-3.col-sm-offset-4
                     .map-container
                       .jumbotron
                         div(id="googleMap" style="height: 100%;width: 100%;")
-                
-                .row.spacer 
-                  .col-sm-offset-4
-                    //request for dog lover 
-                    #requestDogLover
-                      form(role='form', action="/requestdoglover",method="post", style='max-width: 300px;')
-                        .form-group
-                          span.label Start Date
-                          input.form-control(type='datetime-local', id="starttime", name="starttime")
-                        .form-group
-                          span.label End Date
-                          input.form-control(type='datetime-local', id="endtime", name="endtime")
-                        a(href='/')
-                          button.btn.btn-default(type="button") Cancel
-                        &nbsp;
-                        button.btn.btn-success(type='submit') Request
-
-
-                // USER INFO
-                #userInfo
-                  h2 Profile
-                  //put all buttons in
-                  button.btn.btn-default(type="button", id="revokeadmin", onclick='changeAdmin(false)') Revoke admin
-                  button.btn.btn-default(type="button", id="makeadmin", onclick='changeAdmin(true)') Make admin
-                  button.btn.btn-default(type="button", id="deleteuser", onclick='deleteUser()') Delete user
-                  button.btn.btn-default(type="button", id="edit", onclick='editUser()') Edit
-                  img(id="profilepicture" src="" onclick='editUser()')
-                  p
-                    strong Display Name:
-                    |  <span id='userDisplayName' onclick='editUser()'></span>
-                    br
-                    strong Email:
-                    |  <span id='userEmail'></span>
-                    br
-                    strong Description:
-                    |  <span id='userDescription'></span>
-                    br
-                  #Requestslist
-                // /USER INFO
-                #editPage
-                  #pictureSection
-                    h1 Change Picture
-                    br
-                    img(id="profilepicturesection" src="")
-                    br
-                    form(action="/changePicture", method="post", enctype="multipart/form-data")
-                      input(type="file", name="avatar")
-                      input(type="text", id="photoemail", name="photoemail", placeholder='Email', readonly)
-                      input(type="submit" name="upload" value="Change Photo")
-                  #editSection
-                    h1 Update Info
-                    form(role='form', action="/edit",method="post", style='max-width: 300px;')
+              
+              .row.spacer 
+                .col-sm-offset-4
+                  //request for dog lover 
+                  #requestDogLover
+                    form(role='form', action="/requestdoglover",method="post", style='max-width: 300px;')
                       .form-group
-                        span.label Email
-                        input.form-control(type='text', id="email", name="email", placeholder='Email', readonly)
+                        span.label Start Date
+                        input.form-control(type='datetime-local', id="starttime", name="starttime")
                       .form-group
-                        span.label Display Name
-                        input.form-control(type='text', id="displayname", name="displayname", placeholder='Displayname')
-                      .form-group
-                        span.label Description
-                        input.form-control(type='text', id="description", name="description", placeholder='Description')
-                      button.btn.btn-default(type='submit') Update
-                      &nbsp;
+                        span.label End Date
+                        input.form-control(type='datetime-local', id="endtime", name="endtime")
                       a(href='/')
-                        button.btn.btn-primary(type="button") Cancel
-                  #passwordSection
-                    h1 Change Password
-                    form(role='form', action="/changepassword",method="post", style='max-width: 300px;')
-                      .form-group
-                        input.form-control(type='password', id="changeusername", name="username", placeholder='Username')
-                      .form-group
-                        span.label Old Password
-                        input.form-control(type='password', name="password", placeholder='Old Password')
-                      .form-group
-                        span.label New Password
-                        input.form-control(type='password', name="newpassword", placeholder='New Password')
-                      .form-group
-                        span.label Confirm Password
-                        input.form-control(type='password', name="confirmpassword", placeholder='Confirm Password')
-                      button.btn.btn-default(type='submit') Change Password
+                        button.btn.btn-default(type="button") Cancel
                       &nbsp;
-                      a(href='/')
-                        button.btn.btn-primary(type="button") Cancel
-                    br
-                    h4= info
-                #Commentswrapper.col-md-6
-                  h3 
-                    Listing Comments for 
-                    |  <span id='userDisplayNameComment'></span>
-                  #commentsandrating
-                    .panel.panel-primary
-                      .panel-heading
-                        h3.panel-title Leave a Rating
-                      .panel-body
-                        form(role='form', action="/comment",method="post")
-                          .form-group(style='display:none;')
-                            span.label Target profile Email THIS SHOULD BE NOT CHANGABLE
-                            input.form-control(type='text', id="commentemail", name="commentemail", placeholder='Email')
-                          .form-group(style='display:none;')
-                            span.label Current user Email
-                            input.form-control(type='text', id="authoremail", name="authoremail", placeholder='Email')
-                          .form-group
-                            span.label Rating
-                            select(name='ratingnumber')
-                              option(value=5) 5
-                              option(value=4) 4
-                              option(value=3) 3
-                              option(value=2) 2
-                              option(value=1) 1
-                          .form-group
-                            span.label Comment
-                            textarea.form-control(rows="4", id="comment", name="comment",placeholder="Leave a Comment Here")
-                          button.btn.btn-primary(type='submit') Submit
-                  #Commentslist
+                      button.btn.btn-success(type='submit') Request
+      .row#buttons          
+        button.btn.btn-default(type="button", id="revokeadmin", onclick='changeAdmin(false)') Revoke admin
+        button.btn.btn-default(type="button", id="makeadmin", onclick='changeAdmin(true)') Make admin
+        button.btn.btn-default(type="button", id="deleteuser", onclick='deleteUser()') Delete user
+      
+      .row#userInfo         
+        .col-sm-4
+          .row
+            .col-sm-8.col-offset-2
+              | <span id='userDisplayNameComment'></span>
+              | <span>'s profile</span>              
+          .row
+            .col-sm-8.col-offset-2
+              img(id="profilepicture" style="max-width:300px;"  src="")
+          hr.reg-header-hr
+          #Requestslist
 
-            // /WRAPPER
+        .col-sm-4
+          #Commentswrapper
+            #commentsandrating
+              .panel.panel-default
+                .panel-heading.clearfix
+                  h3.panel-title.panel-title-text
+                    | comment
+                .panel-body
+                  form(role='form', action="/comment",method="post")
+                    .form-group(style='display:none;')
+                      span.label Target profile Email THIS SHOULD BE NOT CHANGABLE
+                      input.form-control(type='text', id="commentemail", name="commentemail", placeholder='Email')
+                    .form-group(style='display:none;')
+                      span.label Current user Email
+                      input.form-control(type='text', id="authoremail", name="authoremail", placeholder='Email')
+                    .form-group
+                      span.label Rating
+                      select(name='ratingnumber')
+                        option(value=5) 5
+                        option(value=4) 4
+                        option(value=3) 3
+                        option(value=2) 2
+                        option(value=1) 1
+                    .form-group
+                      textarea.form-control(rows="4", id="comment", name="comment",placeholder="Leave a Comment...")
+                    span.pull-right 
+                      button.btn.btn-success(type='submit') Submit
+              #Commentslist
+            
+        .col-sm-4
+          .panel.panel-default
+            .panel-heading.clearfix
+              h3.panel-title.panel-title-text
+                | Information
+                span.pull-right
+                  #editbutton
+                    button.btn.btn-default.btn-sm(type='button', onclick='editUser()')
+                      glyphicon.glyphicon-glyphicon-pencil
+                      |  Edit
+            .panel-body.person-info-panel
+              .row
+                .col-sm-2
+                  span.person-info-panel-icon
+                    span.glyphicon.glyphicon-user
+                .col-sm-10
+                  |  <span id='userDisplayName' onclick='editUser()'></span>
+              .row
+                .col-sm-2
+                  span.person-info-panel-icon
+                    span.glyphicon.glyphicon-envelope
+                .col-sm-10
+                  |  <span id='userEmail'></span>
+              .row
+                .col-sm-2
+                  span.person-info-panel-icon
+                    span.glyphicon.glyphicon-menu-hamburger
+                .col-sm-10
+                  |  <span id='userDescription'></span>
+         
+      .row#editPage
+        #pictureSection
+          h4 Change Picture
+          br
+          img(id="profilepicturesection" src="")
+          br
+          form(action="/changePicture", method="post", enctype="multipart/form-data")
+            input(type="file", name="avatar")
+            input(type="text", id="photoemail", name="photoemail", placeholder='Email', readonly)
+            br
+            input(type="submit" class="btn btn-default btn-sm" name="upload" value="Change Photo")
+        #editSection
+          h4 Update Info
+          form(role='form', action="/edit",method="post", style='max-width: 300px;')
+            .form-group
+              span.label Email
+              input.form-control(type='text', id="email", name="email", placeholder='Email', readonly)
+            .form-group
+              span.label Display Name
+              input.form-control(type='text', id="displayname", name="displayname", placeholder='Displayname')
+            .form-group
+              span.label Description
+              input.form-control(type='text', id="description", name="description", placeholder='Description')
+            a(href='/')
+              button.btn.btn-default(type="button") Cancel            
+            &nbsp;
+            button.btn.btn-success(type='submit') Update
+        #passwordSection
+          h4 Change Password
+          form(role='form', action="/changepassword",method="post", style='max-width: 300px;')
+            .form-group
+              input.form-control(type='password', id="changeusername", name="username", placeholder='Username')
+            .form-group
+              span.label Old Password
+              input.form-control(type='password', name="password", placeholder='Old Password')
+            .form-group
+              span.label New Password
+              input.form-control(type='password', name="newpassword", placeholder='New Password')
+            .form-group
+              span.label Confirm Password
+              input.form-control(type='password', name="confirmpassword", placeholder='Confirm Password')
+            a(href='/')
+              button.btn.btn-default(type="button") Cancel    
+            &nbsp;
+            button.btn.btn-success(type='submit') Change Password
+
+          br
+          h4= info

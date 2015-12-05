@@ -7,6 +7,10 @@ h2 {
 	margin:0 0 .5em 0;
 }
 
+h3 { 
+	text-align: left;
+}
+
 /* spacer for below the top bar */ 
 .spacer {
   margin-top: 40px;
@@ -28,8 +32,27 @@ a.login {
 	text-align: right;
 }
 
+.container-left { 
+	text-align: left;
+}
+
+.container-center { 
+	text-align: center;
+}
+
 p { 
 	text-align: center;
+}
+
+/* info containers */ 
+.person-info-panel > .row
+{
+  margin-bottom: 10px;
+}
+
+.peron-info-panel-icon
+{
+  opacity: 0.8;
 }
 
 /* make the errors left alight */ 
@@ -133,13 +156,13 @@ a {
 			}
 
 #userInfo {
-	width:300px;
-	top:0; left:0;
+/*	width:300px;
+	top:0; left:0;*/
 }
 	#userInfo p {
-		padding:15px;
+/*		padding:15px;
 		border:1px solid #CCC;
-		background:rgba(80,120,255,0.05);
+		background:rgba(80,120,255,0.05);*/
 	}
 
 #home {

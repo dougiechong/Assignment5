@@ -12,7 +12,7 @@ $(document).ready(function() {
     populateTable();
 	// Username link click
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
-    $('#searchhits table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+  $('#searchhits table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 
 	 // When submit button is clicked on search bar
 	$('#searchform').validate({submitHandler: showSearch});
@@ -75,8 +75,9 @@ function populateTable() {
 		$('#userInfo').hide();
 		$('#userList').show();
 		$('#editPage').hide();
-        $('#searchwrapper').hide();
-        $('#searchform').show();
+		$('#buttons').hide();
+    $('#searchwrapper').hide();
+    $('#searchform').show();
         
 
 		var userdisplayname = $('#user').text();  //get currently logged in user
@@ -181,6 +182,7 @@ $.when(dfrd1).done(function () {
 		});
     });
 };  
+
 // Show User Info
 function showUserInfo(event) {
 	$.ajax({
@@ -197,11 +199,13 @@ function showUserInfo(event) {
 			//Populate Info Box		
 			//show info hide rest
 			$('#wrapper1').hide();
+			$('#wrapper2').hide();
 			$('#userInfo').show();
 			$('#Commentswrapper').show();
 			$('#userList').hide();
 			$('#editPage').hide();
 			//start off all hidden
+			$('#buttons').hide();
 			$('#revokeadmin').hide();
 			$('#makeadmin').hide();
 			$('#deleteuser').hide();
@@ -219,14 +223,17 @@ function showUserInfo(event) {
 				availableRequests += '<div class="eachrequest">';
 				availableRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
 				availableRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
-				availableRequests += '<input type="button" onclick="acceptRequest(\'' + this._id + '\')" value="accept" />'
+				availableRequests += '<button class="btn btn-success btn-sm pull-right" onclick="acceptRequest(\'' + this._id + '\')">accept</button>';
+				availableRequests += '<div class="row spacer"></div>';
+				availableRequests += '<hr class="reg-header-hr"/>';
 				availableRequests += '</div>';
 			} else {
 				acceptedRequests += '<div class="eachrequest">';
 				acceptedRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
 				acceptedRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
 				acceptedRequests += '<div>Accepted By: ' + this.acceptedby + '</div>';
-				acceptedRequests  += '</div>';			
+				acceptedRequests  += '</div>';	
+				acceptedRequests += '<hr class="reg-header-hr"/>';	
 			}
 			});
 			$('#Requestslist').html(availableRequests+acceptedRequests);
@@ -252,15 +259,25 @@ function showUserInfo(event) {
 				}
 				$('#deleteuser').show();
 				$('#edit').show();
+				$('#editbutton').show();
 			} else if(user.admin) {
 				$('#adminOnly').show();
 				if(!thisUserObject.admin) {
 					$('#deleteuser').show();
 					$('#edit').show();
-				} else if(user._id == thisUserObject._id) 
+					$('#editbutton').show();
+				} else if(user._id == thisUserObject._id) { 
+					$('#editbutton').show();
 					$('#edit').show();
-			} else if(user.username == thisUserObject.username)
+				}
+			} else if(user.username == thisUserObject.username) {
 				$('#edit').show();
+				$('#buttons').hide();
+				$('#editbutton').show();
+			}
+			else { 
+				$('#editbutton').hide();
+			}
 			$('#userDisplayName').text(thisUserObject.displayname);
             $('#userDisplayNameComment').text(thisUserObject.displayname);
 			$('#userEmail').text(thisUserObject.email);
@@ -336,7 +353,9 @@ function register(event) {
 
 // Edit User
 function editUser() {
-    $('#searchwrapper').hide();
+	$('#wrapper1').hide();
+	$('#wrapper2').hide();
+  $('#searchwrapper').hide();
 	$('#userInfo').hide();
 	$('#userList').hide();
 	$('#editPage').show();
