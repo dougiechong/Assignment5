@@ -56,8 +56,9 @@ block content
     if (user)
       h4
         small
-          img(style="max-width:10px;" src="/file/"+ user.profilepicture onclick='editUser()')
-        |   Welcome #{user.username}!
+          img(style="max-width:15px;" src="/file/"+ user.profilepicture onclick='editUser()')
+        |  
+        a(onclick='editUser()') #{user.username}
         button.btn.btn-default(type="button" class="pull-right" onclick='logout()') Logout
       hr.reg-header-hr
 
