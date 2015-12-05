@@ -559,8 +559,9 @@ router.get('/searchresults', function(req, res) {
 
 //Add a request
 router.post('/requestdoglover', function(req, res) {
+	console.log("user is " + req.session.passport.username);
 	Account.findOneAndUpdate({ 
-		email: req.session.passport.user
+		_id: req.session.passport.user
 		},
 		{
 			$push: {
@@ -583,7 +584,19 @@ router.post('/requestdoglover', function(req, res) {
 router.post('/acceptrequest/:id/:reqid', function(req, res) {
 	Account.findOneAndUpdate(
 	   { email: req.params.id, "requests._id": req.params.reqid},
-	   { $set: { "requests.$.acceptedby" :  req.session.passport.user} },
+	   { $set: { "requests.$.acceptedby" :  req.user.email} },
+	function(err, account) {
+			if (err) {
+			  return res.render("/", {info: "Sorry. error"});
+			}
+			res.redirect('/');
+	});
+});
+
+//Delete a request
+router.delete('/deleterequest/:id/:reqid', function(req, res) {
+	Account.findOneAndUpdate(
+	   { $pull: { requests: {email: req.params.id, "requests._id": req.params.reqid}}},
 	function(err, account) {
 			if (err) {
 			  return res.render("/", {info: "Sorry. error"});

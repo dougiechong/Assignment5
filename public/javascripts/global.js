@@ -183,6 +183,7 @@ $.when(dfrd1).done(function () {
 };  
 // Show User Info
 function showUserInfo(event) {
+	console.log("THISISI IS CALLED");
 	$.ajax({
 		type: 'POST',
 		url: '/clickeduser/' + $(this).attr('rel')
@@ -209,16 +210,18 @@ function showUserInfo(event) {
             $('#searchwrapper').hide();
 			
 			$('#commentemail').val(thisUserObject.email);
-			$('#authoremail').val(user.username);
+			//$('#authoremail').val(user.username);
 			
 			var availableRequests = '<div>Available Requests</div>';
 			var acceptedRequests = '<div>Accepted Requests</div>';
+			console.log("reqs" + thisUserObject.requests);
 			$.each(thisUserObject.requests, function(){
 			if(this.acceptedby == ""){
 				availableRequests += '<div class="eachrequest">';
 				availableRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
 				availableRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
 				availableRequests += '<input type="button" onclick="acceptRequest(\'' + this._id + '\')" value="accept" />'
+				availableRequests += '<input type="button" onclick="deleteRequest(\'' + this._id + '\')" value="delete" />'
 				availableRequests += '</div>';
 			} else {
 				acceptedRequests += '<div class="eachrequest">';
@@ -367,6 +370,35 @@ function acceptRequest(reqIndex) {
 	}).done(function( response ) {
 		window.location.href = '/';
     });
+}
+
+// Delete Request
+function deleteRequest(reqIndex) {
+    // Pop up a confirmation dialog
+    var confirmation = confirm('Are you sure you want to delete this request?');
+    // Check and make sure the user confirmed
+    if (confirmation === true) {
+
+        // If they did, do our delete
+        $.ajax({
+            type: 'DELETE',
+            url: '/deleterequest/' + thisUserObject.email + '/' + reqIndex
+        }).done(function( response ) {
+			console.log("HHHHHHHDGDSFGFSDF");
+            // Check for a successful (blank) response
+            if (response.msg === '') {
+            }
+            else {
+                alert('Error: ' + response.msg);
+            }
+			//go back home
+            window.location.href = '/'
+        });
+    }
+    else {
+        // If they said no to the confirm, do nothing
+        return false;
+    }
 }
 
 function changePicture() {
