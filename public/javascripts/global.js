@@ -130,7 +130,6 @@ function showSearch(form) {
     
 $.when(dfrd1).done(function () {   
 
-        
         console.log("searchfield: "+searchfield);
         console.log("searchterm: "+searchterm);
         console.log("lat: "+lat);
