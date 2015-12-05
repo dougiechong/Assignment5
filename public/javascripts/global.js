@@ -78,9 +78,11 @@ function populateTable() {
 		$('#userInfo').hide();
 		$('#userList').show();
 		$('#editPage').hide();
-		$('#buttons').hide();
     $('#searchwrapper').hide();
     $('#searchform').show();
+		$('#revokeadmin').hide();
+		$('#makeadmin').hide();
+		$('#deleteuser').hide();
         
 
 		var userdisplayname = $('#user').text();  //get currently logged in user
@@ -179,8 +181,11 @@ $.when(dfrd1).done(function () {
 		$('#userInfo').hide();
 		$('#userList').hide();
 		$('#editPage').hide();
-        $('#requestDogLover').hide();
-        $('#searchwrapper').show();
+		$('#revokeadmin').hide();
+		$('#makeadmin').hide();
+		$('#deleteuser').hide();
+    $('#requestDogLover').hide();
+    $('#searchwrapper').show();
         
 		});
     });
@@ -223,7 +228,6 @@ function showUserInfo(event) {
 			$('#userList').hide();
 			$('#editPage').hide();
 			//start off all hidden
-			$('#buttons').hide();
 			$('#revokeadmin').hide();
 			$('#makeadmin').hide();
 			$('#deleteuser').hide();
@@ -292,7 +296,6 @@ function showUserInfo(event) {
 				}
 			} else if(user.username == thisUserObject.username) {
 				$('#edit').show();
-				$('#buttons').hide();
 				$('#editbutton').show();
 			}
 			else { 
@@ -351,6 +354,9 @@ function goHome(event) {
 	$('#userInfo').hide();
 	$('#userList').show();
 	$('#editPage').hide();
+	$('#revokeadmin').hide();
+	$('#makeadmin').hide();
+	$('#deleteuser').hide();
 	populateTable();
 	window.location.href = '/'
 }
