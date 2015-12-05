@@ -676,7 +676,7 @@ router.get('/login', function(req, res) {
 });
 
 router.get('/flash', function(req, res){
-  req.flash('info', "Account does not exist!")
+  req.flash('info', "Incorrect information!")
   res.redirect('/login');
 });
 
