@@ -76,10 +76,11 @@ function populateTable() {
 		$('#userList').show();
 		$('#editPage').hide();
 		$('#buttons').hide();
-    $('#searchwrapper').hide();
-    $('#searchform').show();
+        $('#searchwrapper').hide();
+        $('#searchform').show();
+        $('#wrapper1').show();
+        $('#wrapper2').show();
         
-
 		var userdisplayname = $('#user').text();  //get currently logged in user
 		// Get Index of object based on id value
 		var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.displayname; }).indexOf(userdisplayname);
@@ -99,11 +100,21 @@ function populateTable() {
 function showSearch(form) {
     
     var dfrd1 = $.Deferred();
-        geocoder.geocode({'address':$('#searchterm').val()},function(results,status){
+    var tableContent = '';
+    var searchfield = document.getElementById("searchfield").value;
+    var searchterm = document.getElementById("searchterm").value;
+    var lat;
+    var lng;
+    
+    if (searchfield == 'location')
+    {
+        searchgeocoder.geocode({'address':$('#searchterm').val()},function(results,status){
             if(status == google.maps.GeocoderStatus.OK){
                 var result = results[0].geometry.location;
                 $(form).prepend('<input type="hidden" id="lat" name="lat" value="'+ result.lat() +'">');
                 $(form).prepend('<input type="hidden" id="lng" name="lng" value="'+ result.lng() +'">');
+                lat = document.getElementById("lat").value;
+                lng = document.getElementById("lng").value;
             }else{
                 registErrors.text("Invalid Address");
                 registErrors.show();
@@ -111,13 +122,14 @@ function showSearch(form) {
             }
             dfrd1.resolve();
         });
-            
+    }
+    else
+    {
+        dfrd1.resolve();
+    }
+    
 $.when(dfrd1).done(function () {   
-        var tableContent = '';
-        var searchfield = document.getElementById("searchfield").value;
-        var searchterm = document.getElementById("searchterm").value;
-        var lat = document.getElementById("lat").value;
-        var lng = document.getElementById("lng").value;
+
         
         console.log("searchfield: "+searchfield);
         console.log("searchterm: "+searchterm);
@@ -134,6 +146,7 @@ $.when(dfrd1).done(function () {
         
         $.getJSON(searchURL, function( data ) {
         //as long as 1 hit is returned, display results
+        console.log("datahits0" + data.hits[0]);
         if (data.hits[0] != null)
         {
             $('#searchhits').show();
@@ -163,9 +176,10 @@ $.when(dfrd1).done(function () {
         else
         {
             // if no hits are returned
+            console.log('no hits');
             $('#searchhits').hide();
             $('#searchnohits').show();
-            $('#searchnohits h3').html("Sorry, We could not find any matches for your search");
+            $('#searchnohits h4').html("Sorry, We could not find any matches for your search");
             
         }
 		//default show userlist
@@ -177,7 +191,9 @@ $.when(dfrd1).done(function () {
 		$('#userList').hide();
 		$('#editPage').hide();
         $('#requestDogLover').hide();
+        $('#wrapper1').hide();
         $('#searchwrapper').show();
+        $('#wrapper2').hide();
         
 		});
     });
@@ -205,6 +221,7 @@ function showUserInfo(event) {
 			$('#userList').hide();
 			$('#editPage').hide();
 			//start off all hidden
+            
 			$('#buttons').hide();
 			$('#revokeadmin').hide();
 			$('#makeadmin').hide();
