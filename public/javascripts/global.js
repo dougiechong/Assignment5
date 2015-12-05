@@ -211,6 +211,9 @@ function showUserInfo(event) {
 			var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName);
 			// Get our User Object
 			thisUserObject = userListData[arrayPosition];
+			if(ownClicked){
+				thisUserObject = user;
+			}
 			//Populate Info Box		
 			//show info hide rest
 			$('#wrapper1').hide();
@@ -227,11 +230,8 @@ function showUserInfo(event) {
 			$('#edit').hide();
 			$('#adminOnly').hide();
             $('#searchwrapper').hide();
-			if(ownClicked)
-				commentEmail = user.email;
-			else
-				commentEmail = thisUserObject.email;
-			$('#commentemail').val(commentEmail);
+			
+			$('#commentemail').val(thisUserObject.email);
 			$('#authoremail').val(user.username);
 			
 			var availableRequests = '<div>Available Requests</div>';
