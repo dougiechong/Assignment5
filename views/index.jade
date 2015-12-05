@@ -3,7 +3,6 @@ extends layout
 // the top nav bar 
 block header  
   if (user)
-    img(id="home" onclick='goHome()' src="/file/Default.jpg")
     p(id="user") #{user.displayname}
 
 block navsearchform
@@ -57,7 +56,7 @@ block content
     if (user)
       h4
         small
-          span.glyphicon.glyphicon-th
+          img(style="max-width:10px;" src="/file/"+ user.profilepicture onclick='editUser()')
         |   Welcome #{user.username}!
         button.btn.btn-default(type="button" class="pull-right" onclick='logout()') Logout
       hr.reg-header-hr
@@ -165,7 +164,7 @@ block content
                       button.btn.btn-default(type='submit') Update
                       &nbsp;
                       a(href='/')
-                      button.btn.btn-primary(type="button") Cancel
+                        button.btn.btn-primary(type="button") Cancel
                   #passwordSection
                     h1 Change Password
                     form(role='form', action="/changepassword",method="post", style='max-width: 300px;')
@@ -183,7 +182,7 @@ block content
                       button.btn.btn-default(type='submit') Change Password
                       &nbsp;
                       a(href='/')
-                      button.btn.btn-primary(type="button") Cancel
+                        button.btn.btn-primary(type="button") Cancel
                     br
                     h4= info
                 #Commentswrapper.col-md-6
