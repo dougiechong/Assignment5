@@ -160,6 +160,19 @@ router.get('/register', function(req, res) {
     res.render('register', { title: 'Register' });
 });
 
+router.backendValidateLatLng = function(lat,lng){
+	var result = true;
+	if(isNaN(lat)){
+		result = false;
+	}
+
+	if(isNaN(lng)){
+		result = false;
+	}
+
+	return result;
+};
+
 router.backendValidatePassword = function(password,username){
 	var hasNumber = /\d/;
 	var hasCapital = /[A-Z]/;
@@ -211,6 +224,10 @@ router.post('/register', function(req, res) {
 
 		if(!router.backendValidateUsername(req.body.username)){
 			return res.render('register', {info: "Incorrect username format!"});
+		}
+
+		if(!router.backendValidateLatLng(req.body.lat,req.body.lng)){
+			return res.render('register', {info: "Invalid location format!"});
 		}
 
 		//username should be email, as it is required  for passport
@@ -668,11 +685,11 @@ router.delete('/deleteuser/:id', function(req, res) {
 /* login page */ 
 
 router.get('/login', function(req, res) {
-    res.render('login', { user : req.user, info: req.flash('info')});
+	res.render('login', { user : req.user, info: req.flash('info')});
 });
 
 router.get('/flash', function(req, res){
-  req.flash('info', "Account does not exist!")
+  req.flash('info', "Incorrect information!")
   res.redirect('/login');
 });
 

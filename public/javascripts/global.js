@@ -5,6 +5,8 @@ var userListData = [];
 var user;  
 var thisUserObject;
 var mapMarkers = [];
+var ownClicked = false;
+var userToShow;
 
 // DOM Ready =============================================================
 $(document).ready(function() {
@@ -12,6 +14,7 @@ $(document).ready(function() {
     populateTable();
 	// Username link click
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+	$('#showuser').on('click', showOwnUserInfo);
     $('#searchhits table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 
 	 // When submit button is clicked on search bar
@@ -51,14 +54,16 @@ function populateTable() {
             tableContent += '<td>' + this.email + '</td>';
             tableContent += '</tr>';
 			if(document.getElementById('googleMap')){
-				var marker = new google.maps.Marker({
-					map: map,
-					position: {
-						lat: this.lat,
-						lng: this.lng
-					}
-				});
-				mapMarkers.push(marker);
+				if(this.lat&&this.lng) {
+					var marker = new google.maps.Marker({
+						map: map,
+						position: {
+							lat: this.lat,
+							lng: this.lng
+						}
+					});
+					mapMarkers.push(marker)
+				}
 			}
         });
 
@@ -73,7 +78,10 @@ function populateTable() {
 		$('#userInfo').hide();
 		$('#userList').show();
 		$('#editPage').hide();
-        $('#searchwrapper').hide();
+		$('#buttons').hide();
+    $('#searchwrapper').hide();
+    $('#searchform').show();
+        
 
 		var userdisplayname = $('#user').text();  //get currently logged in user
 		// Get Index of object based on id value
@@ -94,15 +102,12 @@ function populateTable() {
 function showSearch(form) {
     
     var dfrd1 = $.Deferred();
-        searchgeocoder.geocode({'address':$('#searchterm').val()},function(results,status){
-        console.log("lol: ");
+        geocoder.geocode({'address':$('#searchterm').val()},function(results,status){
             if(status == google.maps.GeocoderStatus.OK){
-            console.log("lol2 ");
                 var result = results[0].geometry.location;
                 $(form).prepend('<input type="hidden" id="lat" name="lat" value="'+ result.lat() +'">');
                 $(form).prepend('<input type="hidden" id="lng" name="lng" value="'+ result.lng() +'">');
             }else{
-            console.log("lol3: ");
                 registErrors.text("Invalid Address");
                 registErrors.show();
                 return;
@@ -111,7 +116,6 @@ function showSearch(form) {
         });
             
 $.when(dfrd1).done(function () {   
-        console.log("lol4: ");
         var tableContent = '';
         var searchfield = document.getElementById("searchfield").value;
         var searchterm = document.getElementById("searchterm").value;
@@ -181,12 +185,24 @@ $.when(dfrd1).done(function () {
 		});
     });
 };  
+
+// Show Own User Info
+function showOwnUserInfo(event) {
+	ownClicked = true;
+	showUserInfo();
+}
+
 // Show User Info
 function showUserInfo(event) {
-	console.log("THISISI IS CALLED");
+	var commentEmail;
+	if(ownClicked)
+		userToShow = user.email;
+	else
+		userToShow = $(this).attr('rel');
+	console.log(userToShow);
 	$.ajax({
 		type: 'POST',
-		url: '/clickeduser/' + $(this).attr('rel')
+		url: '/clickeduser/' + userToShow
 	}).done(function( response ) {
 		$.getJSON( '/clickeduser', function( data ) {
 			// Retrieve display name from link rel attribute
@@ -197,20 +213,26 @@ function showUserInfo(event) {
 			thisUserObject = userListData[arrayPosition];
 			//Populate Info Box		
 			//show info hide rest
+			$('#wrapper1').hide();
+			$('#wrapper2').hide();
 			$('#userInfo').show();
 			$('#Commentswrapper').show();
 			$('#userList').hide();
 			$('#editPage').hide();
 			//start off all hidden
+			$('#buttons').hide();
 			$('#revokeadmin').hide();
 			$('#makeadmin').hide();
 			$('#deleteuser').hide();
 			$('#edit').hide();
 			$('#adminOnly').hide();
             $('#searchwrapper').hide();
-			
-			$('#commentemail').val(thisUserObject.email);
-			//$('#authoremail').val(user.username);
+			if(ownClicked)
+				commentEmail = user.email;
+			else
+				commentEmail = thisUserObject.email;
+			$('#commentemail').val(commentEmail);
+			$('#authoremail').val(user.username);
 			
 			var availableRequests = '<div>Available Requests</div>';
 			var acceptedRequests = '<div>Accepted Requests</div>';
@@ -221,14 +243,17 @@ function showUserInfo(event) {
 				availableRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
 				availableRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
 				availableRequests += '<input type="button" onclick="acceptRequest(\'' + this._id + '\')" value="accept" />'
-				availableRequests += '<input type="button" onclick="deleteRequest(\'' + this._id + '\')" value="delete" />'
+				availableRequests += '<button class="btn btn-success btn-sm pull-right" onclick="acceptRequest(\'' + this._id + '\')">accept</button>';
+				availableRequests += '<div class="row spacer"></div>';
+				availableRequests += '<hr class="reg-header-hr"/>';
 				availableRequests += '</div>';
 			} else {
 				acceptedRequests += '<div class="eachrequest">';
 				acceptedRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
 				acceptedRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
 				acceptedRequests += '<div>Accepted By: ' + this.acceptedby + '</div>';
-				acceptedRequests  += '</div>';			
+				acceptedRequests  += '</div>';	
+				acceptedRequests += '<hr class="reg-header-hr"/>';	
 			}
 			});
 			$('#Requestslist').html(availableRequests+acceptedRequests);
@@ -254,16 +279,27 @@ function showUserInfo(event) {
 				}
 				$('#deleteuser').show();
 				$('#edit').show();
+				$('#editbutton').show();
 			} else if(user.admin) {
 				$('#adminOnly').show();
 				if(!thisUserObject.admin) {
 					$('#deleteuser').show();
 					$('#edit').show();
-				} else if(user._id == thisUserObject._id) 
+					$('#editbutton').show();
+				} else if(user._id == thisUserObject._id) { 
+					$('#editbutton').show();
 					$('#edit').show();
-			} else if(user.username == thisUserObject.username)
+				}
+			} else if(user.username == thisUserObject.username) {
 				$('#edit').show();
+				$('#buttons').hide();
+				$('#editbutton').show();
+			}
+			else { 
+				$('#editbutton').hide();
+			}
 			$('#userDisplayName').text(thisUserObject.displayname);
+            $('#userDisplayNameComment').text(thisUserObject.displayname);
 			$('#userEmail').text(thisUserObject.email);
 			$('#userDescription').text(thisUserObject.description);
 			$('#pageViews').text(thisUserObject.pageviews);
@@ -337,7 +373,9 @@ function register(event) {
 
 // Edit User
 function editUser() {
-    $('#searchwrapper').hide();
+	$('#wrapper1').hide();
+	$('#wrapper2').hide();
+  $('#searchwrapper').hide();
 	$('#userInfo').hide();
 	$('#userList').hide();
 	$('#editPage').show();
@@ -475,11 +513,11 @@ function loginformvalidate(form) {
 	var hasAt = /@/;
 	if($('#username').val() == '' || $('#password').val() == '') {
 		alert("One or more fields are blank");
-		return
+		return;
 	}
 	if(!hasAt.test($('#username').val())) {
 		alert("not a valid email");
-		return
+		return;
 	}
 }
 
