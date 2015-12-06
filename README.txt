@@ -4,7 +4,9 @@ GROUP MEMBERS
 EMAIL: parastoo.abtahi@mail.utoronto.ca
 CDF ID: c5abtahi
 
-2. 
+2. Douglas Chong
+Email:douglas.chong@mail.utoronto.ca
+CDF ID: c4chongd
 
 3. 
 
@@ -25,7 +27,7 @@ if you get the following error upon installation
 { [Error: Cannot find module '../build/Release/bson'] code: 'MODULE_NOT_FOUND' } 
   js-bson: Failed to load c++ bson extension, using pure JS version
 
-search for "require('../build/Release/bson')" in the a4 folder and 
+search for "require('../build/Release/bson')" in the Assignment5 folder and 
 replace all instances with "require('../browser_build/bson')"
 
 *********************************************************************
