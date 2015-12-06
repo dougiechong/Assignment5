@@ -70,7 +70,7 @@ router.get('/file/:id',function(req,res){
 			readstream = gfs.createReadStream({filename: pic_id});
 			readstream.pipe(res);  
 		}else{ 
-			res.writeHead(200, {'Content-Type': 'text/plain'});
+			res.writeHead(404, {'Content-Type': 'text/plain'});
 			res.write('404 Not Found\n');
 			res.end();
 		}
@@ -87,7 +87,7 @@ router.get('/default',function(req,res){
 			readstream = gfs.createReadStream({filename: 'Default.jpg' });
 			readstream.pipe(res);  
 		}else{ 
-			res.writeHead(200, {'Content-Type': 'text/plain'});
+			res.writeHead(404, {'Content-Type': 'text/plain'});
 			res.write('404 Not Found\n');
 			res.end();
 		}
@@ -519,7 +519,7 @@ router.get('/searchresults', function(req, res) {
               threshold: 2,   // The amount of characters to ignore before returning matches (default: 3)
               limit: 20,      // The maximum amount of suggestions
               type: 'ID'  // The type of autosuggest returned- can be `simple`, `ID` or `count`
-            } 
+            };
             
             si.match(matchOptions, function(err, results) {
                 console.log('Performing search with query: '+searchterm);
@@ -685,7 +685,7 @@ router.delete('/deleteuser/:id', function(req, res) {
 /* login page */ 
 
 router.get('/login', function(req, res) {
-	res.render('login', { user : req.user, info: req.flash('info')});
+    res.status(200).render('login', { user : req.user, info: req.flash('info')});
 });
 
 router.get('/flash', function(req, res){

@@ -53,11 +53,4 @@ describe('Index Routes Tests', function(){
         assert.equal(index.backendValidateLatLng(40.33333,35.6666),true);
         done();
     });
-
-    it('Admin login correctly' ,function(done){
-        http.post('http://localhost:3000/login', function (res) {
-            assert.equal(200, res.statusCode);
-            done();
-        });
-    });
 });
