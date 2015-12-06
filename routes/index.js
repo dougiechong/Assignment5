@@ -298,15 +298,15 @@ router.post('/comment', function(req, res) {
 router.get('/search', function(req, res) {
 	var searchterm = req.query.searchterm;
     var searchfield = req.query.searchfield;
-    var locationflag = req.query.loc;
+    /* var locationflag = req.query.loc;
     var lat = req.query.lat;
-    var lng = req.query.lng;
+    var lng = req.query.lng; */
 
     var q={};
     q.query = {};
     q.query[searchfield] = [searchterm];
     
-    // the negative sign affects the search results, so strip it
+    /* // the negative sign affects the search results, so strip it
     if(lat.charAt(0) === '-')
     lat = lat.substr(1);
     if(lng.charAt(0) === '-')
@@ -325,7 +325,7 @@ router.get('/search', function(req, res) {
           'lat': [lat],
           'lng':[lng]
         };
-    }
+    } */
             
     // Run the following three functions in series: Empty the index; query the DB and add all documents to the index; then finally search the index
     async.series([
