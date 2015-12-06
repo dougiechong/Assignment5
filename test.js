@@ -2,6 +2,7 @@ var assert = require('assert');
 
 var index = require('./routes/index.js');
 
+
 describe('Index Routes Tests', function(){
     it('Password too short (password: "Test1" and username: "blah").',function(done){
        assert.equal(index.backendValidatePassword('Test1','blah'),false);
