@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 var index = require('./routes/index.js');
-
+var http = require('http');
 
 describe('Index Routes Tests', function(){
     it('Password too short (password: "Test1" and username: "blah").',function(done){
@@ -52,5 +52,12 @@ describe('Index Routes Tests', function(){
     it('Lat and Lng are valid (lat: "40.33333" and lng: "35.6666")' ,function(done){
         assert.equal(index.backendValidateLatLng(40.33333,35.6666),true);
         done();
+    });
+
+    it('Admin login correctly' ,function(done){
+        http.post('http://localhost:3000/login', function (res) {
+            assert.equal(200, res.statusCode);
+            done();
+        });
     });
 });

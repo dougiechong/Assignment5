@@ -15,7 +15,7 @@ var isAuthenticated = function (req, res, next) {
 		return next();
 	// if the user is not authenticated then redirect him to the login page
 	res.redirect('/fail');
-}
+};
 /*****************************************************************************************/
 
 //used to find location given IP address
@@ -371,7 +371,7 @@ router.get('/match', function(req, res) {
           threshold: 2,   // The amount of characters to ignore before returning matches (default: 3)
           limit: 20,      // The maximum amount of suggestions
           type: 'ID'  // The type of autosuggest returned- can be `simple`, `ID` or `count`
-        }
+        };
     var q={};
     q.query = {};
     q.query[searchfield] = [searchterm];
@@ -689,7 +689,7 @@ router.get('/login', function(req, res) {
 });
 
 router.get('/flash', function(req, res){
-  req.flash('info', "Incorrect information!")
+  req.flash('info', "Incorrect information!");
   res.redirect('/login');
 });
 
