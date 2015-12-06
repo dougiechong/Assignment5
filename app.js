@@ -26,7 +26,7 @@ var geoip = require('geoip-lite');
 var Grid = require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
 var conn = mongoose.connection;
-var URI = "mongodb://heroku_7x6mqnpd:s6q13aib0fhtvbq8nh0og4gt57@ds061954.mongolab.com:61954/heroku_7x6mqnpd"
+var URI = "mongodb://heroku_7x6mqnpd:s6q13aib0fhtvbq8nh0og4gt57@ds061954.mongolab.com:61954/heroku_7x6mqnpd";
 conn.once('open', function () {
     var gfs = Grid(conn.db);
 	gfs.findOne({ filename: 'Default.jpg' },function (err, file) {   
@@ -56,6 +56,7 @@ app.use(compression());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.set('view cache', true);
 
 var multer = require('multer');
 var upload = multer({ dest: './uploads' });

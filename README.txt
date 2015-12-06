@@ -8,7 +8,9 @@ CDF ID: c5abtahi
 Email:douglas.chong@mail.utoronto.ca
 CDF ID: c4chongd
 
-3. 
+3. Shubham Dhond
+Email: shubham.dhond@mail.utoronto.ca
+CDF ID: g5dhonds
 
 4.
 
@@ -38,3 +40,16 @@ you may have to install connect-flash for the passport authentication
 this can be installed using "npm install connect-flash"
 for more information see: 
 https://github.com/jaredhanson/connect-flash/blob/master/README.md
+
+*********************************************************************
+
+UNIT TESTS:
+
+This application includes unit testing which was implemented using
+the Mocha test framework for JavaScript. These tests check that the basic
+functionality of the application is working. To run the unit tests run
+the commands below in the root directory of the application:
+
+1. sudo npm install
+
+2. sudo mocha test
