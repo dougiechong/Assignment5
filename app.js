@@ -18,6 +18,8 @@ var flash = require('connect-flash'); // for errors
 var compression = require('compression');
 
 var app = express();
+//for testing in mocha
+app.routes = routes;
 
 var fs = require('fs');
 var geoip = require('geoip-lite');
