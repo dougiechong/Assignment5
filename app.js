@@ -14,7 +14,8 @@ var mongoose = require('mongoose');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var flash = require('connect-flash'); // for errors 
+var flash = require('connect-flash'); // for errors
+var compression = require('compression');
 
 var app = express();
 
@@ -48,6 +49,8 @@ conn.once('open', function () {
 var device = require('express-device');
 app.set('view options', { layout: false });
 app.use(device.capture());
+
+app.use(compression());
 
 
 // view engine setup

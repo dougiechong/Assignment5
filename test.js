@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 var index = require('./routes/index.js');
+var http = require('http');
 
 describe('Index Routes Tests', function(){
     it('Password too short (password: "Test1" and username: "blah").',function(done){

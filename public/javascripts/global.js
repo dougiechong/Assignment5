@@ -5,8 +5,6 @@ var userListData = [];
 var user;  
 var thisUserObject;
 var mapMarkers = [];
-var ownClicked = false;
-var userToShow;
 
 // DOM Ready =============================================================
 $(document).ready(function() {
@@ -14,8 +12,7 @@ $(document).ready(function() {
     populateTable();
 	// Username link click
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
-	$('#showuser').on('click', showOwnUserInfo);
-    $('#searchhits table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+  $('#searchhits table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 
 	 // When submit button is clicked on search bar
 	$('#searchform').validate({submitHandler: showSearch});
@@ -78,13 +75,12 @@ function populateTable() {
 		$('#userInfo').hide();
 		$('#userList').show();
 		$('#editPage').hide();
-    $('#searchwrapper').hide();
-    $('#searchform').show();
-		$('#revokeadmin').hide();
-		$('#makeadmin').hide();
-		$('#deleteuser').hide();
+		$('#buttons').hide();
+        $('#searchwrapper').hide();
+        $('#searchform').show();
+        $('#wrapper1').show();
+        $('#wrapper2').show();
         
-
 		var userdisplayname = $('#user').text();  //get currently logged in user
 		// Get Index of object based on id value
 		var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.displayname; }).indexOf(userdisplayname);
@@ -104,11 +100,21 @@ function populateTable() {
 function showSearch(form) {
     
     var dfrd1 = $.Deferred();
-        geocoder.geocode({'address':$('#searchterm').val()},function(results,status){
+    var tableContent = '';
+    var searchfield = document.getElementById("searchfield").value;
+    var searchterm = document.getElementById("searchterm").value;
+    var lat;
+    var lng;
+    
+    if (searchfield == 'location')
+    {
+        searchgeocoder.geocode({'address':$('#searchterm').val()},function(results,status){
             if(status == google.maps.GeocoderStatus.OK){
                 var result = results[0].geometry.location;
                 $(form).prepend('<input type="hidden" id="lat" name="lat" value="'+ result.lat() +'">');
                 $(form).prepend('<input type="hidden" id="lng" name="lng" value="'+ result.lng() +'">');
+                lat = document.getElementById("lat").value;
+                lng = document.getElementById("lng").value;
             }else{
                 registErrors.text("Invalid Address");
                 registErrors.show();
@@ -116,14 +122,14 @@ function showSearch(form) {
             }
             dfrd1.resolve();
         });
-            
+    }
+    else
+    {
+        dfrd1.resolve();
+    }
+    
 $.when(dfrd1).done(function () {   
-        var tableContent = '';
-        var searchfield = document.getElementById("searchfield").value;
-        var searchterm = document.getElementById("searchterm").value;
-        var lat = document.getElementById("lat").value;
-        var lng = document.getElementById("lng").value;
-        
+
         console.log("searchfield: "+searchfield);
         console.log("searchterm: "+searchterm);
         console.log("lat: "+lat);
@@ -139,6 +145,7 @@ $.when(dfrd1).done(function () {
         
         $.getJSON(searchURL, function( data ) {
         //as long as 1 hit is returned, display results
+        console.log("datahits0" + data.hits[0]);
         if (data.hits[0] != null)
         {
             $('#searchhits').show();
@@ -168,9 +175,10 @@ $.when(dfrd1).done(function () {
         else
         {
             // if no hits are returned
+            console.log('no hits');
             $('#searchhits').hide();
             $('#searchnohits').show();
-            $('#searchnohits h3').html("Sorry, We could not find any matches for your search");
+            $('#searchnohits h4').html("Sorry, We could not find any matches for your search");
             
         }
 		//default show userlist
@@ -181,33 +189,20 @@ $.when(dfrd1).done(function () {
 		$('#userInfo').hide();
 		$('#userList').hide();
 		$('#editPage').hide();
-		$('#revokeadmin').hide();
-		$('#makeadmin').hide();
-		$('#deleteuser').hide();
-    $('#requestDogLover').hide();
-    $('#searchwrapper').show();
+        $('#requestDogLover').hide();
+        $('#wrapper1').hide();
+        $('#searchwrapper').show();
+        $('#wrapper2').hide();
         
 		});
     });
 };  
 
-// Show Own User Info
-function showOwnUserInfo(event) {
-	ownClicked = true;
-	showUserInfo();
-}
-
 // Show User Info
 function showUserInfo(event) {
-	var commentEmail;
-	if(ownClicked)
-		userToShow = user.email;
-	else
-		userToShow = $(this).attr('rel');
-	console.log(userToShow);
 	$.ajax({
 		type: 'POST',
-		url: '/clickeduser/' + userToShow
+		url: '/clickeduser/' + $(this).attr('rel')
 	}).done(function( response ) {
 		$.getJSON( '/clickeduser', function( data ) {
 			// Retrieve display name from link rel attribute
@@ -216,9 +211,6 @@ function showUserInfo(event) {
 			var arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName);
 			// Get our User Object
 			thisUserObject = userListData[arrayPosition];
-			if(ownClicked){
-				thisUserObject = user;
-			}
 			//Populate Info Box		
 			//show info hide rest
 			$('#wrapper1').hide();
@@ -228,6 +220,8 @@ function showUserInfo(event) {
 			$('#userList').hide();
 			$('#editPage').hide();
 			//start off all hidden
+            
+			$('#buttons').hide();
 			$('#revokeadmin').hide();
 			$('#makeadmin').hide();
 			$('#deleteuser').hide();
@@ -236,17 +230,15 @@ function showUserInfo(event) {
             $('#searchwrapper').hide();
 			
 			$('#commentemail').val(thisUserObject.email);
-			$('#authoremail').val(user.username);
-			
+			$('#authoremail').val(user.email);
+
 			var availableRequests = '<div>Available Requests</div>';
 			var acceptedRequests = '<div>Accepted Requests</div>';
-			console.log("reqs" + thisUserObject.requests);
 			$.each(thisUserObject.requests, function(){
 			if(this.acceptedby == ""){
 				availableRequests += '<div class="eachrequest">';
 				availableRequests += '<div>Start Time ' + this.starttime.split("T")[0] + " " + this.starttime.split("T")[1] + '</div>';
 				availableRequests += '<div>End Time ' + this.endtime.split("T")[0] + " " + this.endtime.split("T")[1] + '</div>';
-				availableRequests += '<input type="button" onclick="acceptRequest(\'' + this._id + '\')" value="accept" />'
 				availableRequests += '<button class="btn btn-success btn-sm pull-right" onclick="acceptRequest(\'' + this._id + '\')">accept</button>';
 				availableRequests += '<div class="row spacer"></div>';
 				availableRequests += '<hr class="reg-header-hr"/>';
@@ -296,6 +288,7 @@ function showUserInfo(event) {
 				}
 			} else if(user.username == thisUserObject.username) {
 				$('#edit').show();
+				$('#buttons').hide();
 				$('#editbutton').show();
 			}
 			else { 
@@ -354,9 +347,6 @@ function goHome(event) {
 	$('#userInfo').hide();
 	$('#userList').show();
 	$('#editPage').hide();
-	$('#revokeadmin').hide();
-	$('#makeadmin').hide();
-	$('#deleteuser').hide();
 	populateTable();
 	window.location.href = '/'
 }
@@ -414,35 +404,6 @@ function acceptRequest(reqIndex) {
 	}).done(function( response ) {
 		window.location.href = '/';
     });
-}
-
-// Delete Request
-function deleteRequest(reqIndex) {
-    // Pop up a confirmation dialog
-    var confirmation = confirm('Are you sure you want to delete this request?');
-    // Check and make sure the user confirmed
-    if (confirmation === true) {
-
-        // If they did, do our delete
-        $.ajax({
-            type: 'DELETE',
-            url: '/deleterequest/' + thisUserObject.email + '/' + reqIndex
-        }).done(function( response ) {
-			console.log("HHHHHHHDGDSFGFSDF");
-            // Check for a successful (blank) response
-            if (response.msg === '') {
-            }
-            else {
-                alert('Error: ' + response.msg);
-            }
-			//go back home
-            window.location.href = '/'
-        });
-    }
-    else {
-        // If they said no to the confirm, do nothing
-        return false;
-    }
 }
 
 function changePicture() {
